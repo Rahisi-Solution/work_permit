@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wps_survey/helper/size_config.dart';
+import 'package:wps_survey/screens/verify_permit.dart';
 import 'package:wps_survey/screens/survey.dart';
 
 import '../helper/appcolors.dart';
@@ -175,40 +176,44 @@ class _HomeState extends State<Home> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                width: SizeConfig.widthMultiplier * 45,
-                height: SizeConfig.heightMultiplier * 15,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.secondaryColor.withOpacity(0.4)),
-                ),
-                child: Stack(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Image.asset(
-                            'assets/images/permit_icon.png',
-                            height: SizeConfig.heightMultiplier * 10,
-                            width: SizeConfig.widthMultiplier * 22,
-                            fit: BoxFit.cover,
-                            color: AppColors.secondaryColor,
-                          ),
-                        ),
-                        Center(
-                          child: Text(
-                            "Verify permit".toUpperCase(),
-                            style: TextStyle(
-                              fontSize: SizeConfig.textMultiplier * 2.5,
-                              color: AppColors.primaryColor,
-                              fontWeight: FontWeight.w600,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const VerifyPermit()));
+                },
+                child: Container(
+                  width: SizeConfig.widthMultiplier * 45,
+                  height: SizeConfig.heightMultiplier * 15,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.secondaryColor.withOpacity(0.4)),
+                  ),
+                  child: Stack(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Image.asset(
+                              'assets/images/permit_icon.png',
+                              height: SizeConfig.heightMultiplier * 10,
+                              width: SizeConfig.widthMultiplier * 22,
+                              fit: BoxFit.cover,
+                              color: AppColors.secondaryColor,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Positioned(
+                          Center(
+                            child: Text(
+                              "Verify permit".toUpperCase(),
+                              style: TextStyle(
+                                fontSize: SizeConfig.textMultiplier * 2.5,
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Positioned(
                         bottom: 0,
                         right: 0,
                         left: 0,
@@ -222,8 +227,10 @@ class _HomeState extends State<Home> {
                               bottomLeft: Radius.circular(500),
                             ),
                           ),
-                        ))
-                  ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Container(

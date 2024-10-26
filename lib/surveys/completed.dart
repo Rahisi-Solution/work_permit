@@ -4,26 +4,26 @@ import 'package:wps_survey/helper/size_config.dart';
 
 import '../helper/appcolors.dart';
 
-class NewSurveys extends StatefulWidget {
-  const NewSurveys({super.key});
+class CompletedSurveys extends StatefulWidget {
+  const CompletedSurveys({super.key});
 
   @override
-  State<NewSurveys> createState() => _NewSurveysState();
+  State<CompletedSurveys> createState() => _CompletedSurveysState();
 }
 
-class _NewSurveysState extends State<NewSurveys> {
+class _CompletedSurveysState extends State<CompletedSurveys> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
           itemCount: 12,
           itemBuilder: (BuildContext context, int index) {
-        return _newSurveys();
-      }),
+            return _completedSurveys();
+          }),
     );
   }
 
-  _newSurveys(){
+  _completedSurveys(){
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -50,7 +50,7 @@ class _NewSurveysState extends State<NewSurveys> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
-                            "Golden Tulip Hotel".toUpperCase(),
+                            "Mwanamke Initiative Co".toUpperCase(),
                             style: TextStyle(
                               fontSize: SizeConfig.textMultiplier * 2,
                               color: AppColors.primaryColor,
@@ -68,7 +68,7 @@ class _NewSurveysState extends State<NewSurveys> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
-                          "Fumba Town",
+                          "Kianga Magharibi A",
                           style: TextStyle(
                             fontSize: SizeConfig.textMultiplier * 2,
                             color: AppColors.primaryColor,
@@ -85,7 +85,7 @@ class _NewSurveysState extends State<NewSurveys> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
-                          "New",
+                          "Completed",
                           style: TextStyle(
                             fontSize: SizeConfig.textMultiplier * 2,
                             color: AppColors.primaryColor,
@@ -102,7 +102,7 @@ class _NewSurveysState extends State<NewSurveys> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
-                          "12/12/2024",
+                          "20/11/2024",
                           style: TextStyle(
                             fontSize: SizeConfig.textMultiplier * 2,
                             color: AppColors.primaryColor,
@@ -122,10 +122,10 @@ class _NewSurveysState extends State<NewSurveys> {
               child: Container(
                 width: SizeConfig.widthMultiplier * 2,
                 decoration: const BoxDecoration(
-                  color: AppColors.primaryColor,
+                  color: Color(0xff09bc8a),
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
                   ),
                 ),
               ),

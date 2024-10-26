@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wps_survey/helper/appcolors.dart';
+import 'package:wps_survey/surveys/completed.dart';
+import 'package:wps_survey/surveys/new.dart';
+import 'package:wps_survey/surveys/rejected.dart';
 
 import '../helper/size_config.dart';
 
@@ -102,9 +105,9 @@ class _SurveyScreenState extends State<SurveyScreen> {
   _pageRenders() {
     return const TabBarView(
       children: [
-        Center(child: Text('New Page')),
-        Center(child: Text('Completed Page')),
-        Center(child: Text('Rejected Page')),
+        NewSurveys(),
+        CompletedSurveys(),
+        RejectedSurveys(),
       ],
     );
   }
