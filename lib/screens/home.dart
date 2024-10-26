@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wps_survey/helper/size_config.dart';
+import 'package:wps_survey/screens/survey.dart';
 
 import '../helper/appcolors.dart';
 import '../helper/slide_up.dart';
@@ -15,37 +17,26 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        // appBar: AppBar(
-        //   automaticallyImplyLeading: false,
-        //   centerTitle: true,
-        //   elevation: 0,
-        //   backgroundColor: AppColors.primaryColor,
-        //   actions: [
-        //     Padding(
-        //       padding: const EdgeInsets.all(8.0),
-        //       child: IconButton(
-        //           onPressed: () {},
-        //           icon: const Icon(
-        //             CupertinoIcons.gear_solid,
-        //             color: Colors.white,
-        //           )),
-        //     )
-        //   ],
-        // ),
-        body: SafeArea(
-          child: SizedBox(
-            width: SizeConfig.widthMultiplier * 100,
-            height: SizeConfig.heightMultiplier * 100,
-            child: ListView(
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _topSection(),
-                SizedBox(height: SizeConfig.heightMultiplier * 1),
-                _bodySection(),
-              ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.light,
+        statusBarColor: AppColors.primaryColor,
+      ),
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          body: SafeArea(
+            child: SizedBox(
+              width: SizeConfig.widthMultiplier * 100,
+              height: SizeConfig.heightMultiplier * 100,
+              child: ListView(
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  _topSection(),
+                  SizedBox(height: SizeConfig.heightMultiplier * 1),
+                  _bodySection(),
+                ],
+              ),
             ),
           ),
         ),
@@ -119,55 +110,65 @@ class _HomeState extends State<Home> {
       padding: EdgeInsets.all(SizeConfig.heightMultiplier * 1.5),
       child: Column(
         children: [
-          Container(
-            width: SizeConfig.widthMultiplier * 100,
-            height: SizeConfig.heightMultiplier * 15,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.primaryColor.withOpacity(0.4)),
-            ),
-            child: Stack(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: Image.asset(
-                        'assets/images/survey_icon.png',
-                        height: SizeConfig.heightMultiplier * 10,
-                        width: SizeConfig.widthMultiplier * 22,
-                        fit: BoxFit.cover,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        "Start surveys".toUpperCase(),
-                        style: TextStyle(
-                          fontSize: SizeConfig.textMultiplier * 2.5,
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const SurveyScreen(),
                 ),
-                Positioned(
-                    bottom: 0,
-                    right: 0,
-                    left: 0,
-                    child: Container(
-                      height: SizeConfig.heightMultiplier * 0.8,
-                      width: SizeConfig.widthMultiplier * 95,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primaryColor,
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(500),
-                          bottomLeft: Radius.circular(500),
+              );
+            },
+            child: Container(
+              width: SizeConfig.widthMultiplier * 100,
+              height: SizeConfig.heightMultiplier * 15,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.primaryColor.withOpacity(0.4)),
+              ),
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Image.asset(
+                          'assets/images/survey_icon.png',
+                          height: SizeConfig.heightMultiplier * 10,
+                          width: SizeConfig.widthMultiplier * 22,
+                          fit: BoxFit.cover,
+                          color: AppColors.primaryColor,
                         ),
                       ),
-                    ))
-              ],
+                      Center(
+                        child: Text(
+                          "Start surveys".toUpperCase(),
+                          style: TextStyle(
+                            fontSize: SizeConfig.textMultiplier * 2.5,
+                            color: AppColors.primaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                      bottom: 0,
+                      right: 0,
+                      left: 0,
+                      child: Container(
+                        height: SizeConfig.heightMultiplier * 0.8,
+                        width: SizeConfig.widthMultiplier * 95,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primaryColor,
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(500),
+                            bottomLeft: Radius.circular(500),
+                          ),
+                        ),
+                      ))
+                ],
+              ),
             ),
           ),
           SizedBox(height: SizeConfig.heightMultiplier * 2),
