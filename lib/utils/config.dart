@@ -8,11 +8,7 @@ class Config {
   static const String endPoint = 'https://earrival.rahisi.co.tz/api/pos/';
 
   static const String officerLogin = '${endPoint}officer_login';
-  // static const String verifyPolicy = '${endPoint}get_policy_applicant';
-  // static const String markInUse = '${endPoint}mark_inuse';
-  // static const String markSeized = '${endPoint}markSeized';
-  // static const String changePin = '${endPoint}change_pin';
-  // static const String resetPin = '${endPoint}officer_reset_pin';
+  static const String saveSurvey = '${endPoint}save_survey';
 
   static Future customFlushbar(String title, String notice, BuildContext context) {
     return Flushbar(

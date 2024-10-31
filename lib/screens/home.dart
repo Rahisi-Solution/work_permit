@@ -6,6 +6,7 @@ import 'package:wps_survey/screens/settings.dart';
 import 'package:wps_survey/screens/verify_card.dart';
 import 'package:wps_survey/screens/verify_permit.dart';
 import 'package:wps_survey/screens/survey.dart';
+import 'package:wps_survey/screens/verify_permit.dart';
 
 import '../helper/appcolors.dart';
 import '../helper/slide_up.dart';
