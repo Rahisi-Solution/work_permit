@@ -38,6 +38,10 @@ dependencies:
   another_flushbar:
   connectivity:
   camera: ^0.10.4
+  easy_stepper:
+  im_stepper:
+  dio:
+  intl:
 
 dev_dependencies:
   flutter_test:

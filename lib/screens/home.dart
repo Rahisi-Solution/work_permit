@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wps_survey/helper/size_config.dart';
-import 'package:wps_survey/screens/verify_permit.dart';
 import 'package:wps_survey/screens/survey.dart';
+import 'package:wps_survey/screens/verify_permit.dart';
 
 import '../helper/appcolors.dart';
 import '../helper/slide_up.dart';

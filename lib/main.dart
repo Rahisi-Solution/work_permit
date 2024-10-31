@@ -20,9 +20,14 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Work permit Inspection App',
           theme: ThemeData(
-            useMaterial3: true,
-            fontFamily: 'Poppins',
-          ),
+              useMaterial3: true,
+              fontFamily: 'Poppins',
+              datePickerTheme: DatePickerThemeData(
+                surfaceTintColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5), // Set border radius here
+                ),
+              )),
           home: SplashScreen(),
         );
       });
