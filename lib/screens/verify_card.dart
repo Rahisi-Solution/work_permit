@@ -5,14 +5,14 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../helper/appcolors.dart';
 import '../helper/size_config.dart';
 
-class VerifyPermit extends StatefulWidget {
-  const VerifyPermit({Key? key}) : super(key: key);
+class VerifyCard extends StatefulWidget {
+  const VerifyCard({super.key});
 
   @override
-  _VerifyPermitState createState() => _VerifyPermitState();
+  State<VerifyCard> createState() => _VerifyCardState();
 }
 
-class _VerifyPermitState extends State<VerifyPermit> {
+class _VerifyCardState extends State<VerifyCard> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
   String result = "Scan a QR code";
@@ -29,11 +29,11 @@ class _VerifyPermitState extends State<VerifyPermit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Verify Permit',
+        title: Text('Verify Card',
           style: TextStyle(
-            fontSize: SizeConfig.textMultiplier * 2.5,
-            color: Colors.white,
-          ),
+          fontSize: SizeConfig.textMultiplier * 2.5,
+          color: Colors.white,
+        ),
         ),
         leading: IconButton(
           onPressed: () {
