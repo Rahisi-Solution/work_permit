@@ -1,17 +1,28 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:im_stepper/stepper.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wps_survey/utils/config.dart';
+import 'package:wps_survey/widgets/confirm_dialog.dart';
 
 import '../helper/appcolors.dart';
 import '../helper/size_config.dart';
 import '../models/employee_model.dart';
+import '../provider/theme_provider.dart';
+import '../widgets/dialog_helper.dart';
 
 class StepperHome extends StatefulWidget {
+  final dynamic splashData;
+  final dynamic refNumber;
+
+  const StepperHome({super.key, this.splashData, this.refNumber});
   @override
-  _StepperHomeState createState() => _StepperHomeState();
+  State<StepperHome> createState() => _StepperHomeState();
 }
 
 class _StepperHomeState extends State<StepperHome> {
@@ -31,19 +42,19 @@ class _StepperHomeState extends State<StepperHome> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+      lastDate: DateTime.now(),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: AppColors.primaryColor.withOpacity(0.7), // Header background color
-              onPrimary: Colors.white, // Header text color
-              onSurface: Colors.black, // Body text color
+              primary: AppColors.primaryColor.withOpacity(0.7),
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
             ),
             dividerTheme: DividerThemeData(
               color: AppColors.primaryColor.withOpacity(0.1),
             ),
-            dialogBackgroundColor: Colors.grey[200], // Background color
+            dialogBackgroundColor: Colors.grey[200],
           ),
           child: child!,
         );
@@ -66,7 +77,9 @@ class _StepperHomeState extends State<StepperHome> {
   List<Employee> employees = [];
   void addEmployeeForm() {
     setState(() {
-      employeeForms.add(EmployeeForm());
+      employeeForms.add(EmployeeForm(
+        splashData: widget.splashData,
+      ));
       for (var i = 0; i < employeeForms.length; i++) {
         employees.add(Employee(
           name: "",
@@ -90,6 +103,20 @@ class _StepperHomeState extends State<StepperHome> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Splash data at Stepper: ${widget.splashData}");
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    Color? buttonColor;
+    Color? textColor;
+    Color? textColor2;
+    if (themeProvider.isDarkMode) {
+      textColor = Colors.white;
+      textColor2 = AppColors.primaryColor;
+      buttonColor = Colors.white;
+    } else {
+      textColor = AppColors.primaryColor;
+      textColor2 = Colors.white;
+      buttonColor = AppColors.primaryColor;
+    }
     return AnnotatedRegion(
       value: const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
@@ -97,7 +124,6 @@ class _StepperHomeState extends State<StepperHome> {
       ),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.grey[300],
           appBar: AppBar(
             backgroundColor: AppColors.primaryColor,
             centerTitle: true,
@@ -170,7 +196,7 @@ class _StepperHomeState extends State<StepperHome> {
                       height: SizeConfig.heightMultiplier * 5.5,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: AppColors.primaryColor),
+                        border: Border.all(color: buttonColor),
                       ),
                       child: TextButton(
                         onPressed: () {
@@ -184,14 +210,14 @@ class _StepperHomeState extends State<StepperHome> {
                             ? Text(
                                 'Previous',
                                 style: TextStyle(
-                                  color: AppColors.primaryColor,
+                                  color: textColor,
                                   fontSize: SizeConfig.textMultiplier * 1.8,
                                 ),
                               )
                             : Text(
                                 'Cancel',
                                 style: TextStyle(
-                                  color: AppColors.primaryColor,
+                                  color: textColor,
                                   fontSize: SizeConfig.textMultiplier * 1.8,
                                 ),
                               ),
@@ -201,7 +227,7 @@ class _StepperHomeState extends State<StepperHome> {
                       width: SizeConfig.widthMultiplier * 35,
                       height: SizeConfig.heightMultiplier * 5.5,
                       decoration: BoxDecoration(
-                        color: AppColors.primaryColor,
+                        color: buttonColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: TextButton(
@@ -210,14 +236,14 @@ class _StepperHomeState extends State<StepperHome> {
                             ? Text(
                                 'Submit',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: textColor2,
                                   fontSize: SizeConfig.textMultiplier * 1.8,
                                 ),
                               )
                             : Text(
                                 'Next',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: textColor2,
                                   fontSize: SizeConfig.textMultiplier * 1.8,
                                 ),
                               ),
@@ -264,6 +290,14 @@ class _StepperHomeState extends State<StepperHome> {
   }
 
   Widget foreignEmployees() {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    Color? cardColor;
+    Color? textColor;
+    if (themeProvider.isDarkMode) {
+      textColor = Colors.white;
+    } else {
+      textColor = AppColors.primaryColor;
+    }
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
@@ -272,7 +306,7 @@ class _StepperHomeState extends State<StepperHome> {
             Text(
               'Foreign Employees Statistics',
               style: TextStyle(
-                color: AppColors.primaryColor,
+                color: textColor,
                 fontSize: SizeConfig.textMultiplier * 2,
               ),
             ),
@@ -285,17 +319,6 @@ class _StepperHomeState extends State<StepperHome> {
                   itemBuilder: (context, index) {
                     return employeeForms.isEmpty ? Container() : employeeForms[index];
                   },
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Text(
-                    '${employeeForms.length}',
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: SizeConfig.textMultiplier * 2,
-                    ),
-                  ),
                 ),
               ],
             ),
@@ -472,20 +495,28 @@ class _StepperHomeState extends State<StepperHome> {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.heightMultiplier * 2),
-                      child: TextFormField(
-                        controller: totalLocalEmployees,
-                        cursorColor: AppColors.primaryColor,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: 'Total local employees',
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: SizeConfig.textMultiplier * 1.8,
-                          ),
+                    child: TextFormField(
+                      controller: totalLocalEmployees,
+                      cursorColor: AppColors.primaryColor,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                        hintText: 'Total local employees',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: AppColors.primaryColor.withOpacity(0.5),
+                          fontSize: SizeConfig.textMultiplier * 1.8,
                         ),
+                        // textAlignVertical: TextAlignVertical.center,
+                        prefixIcon: const Icon(
+                          CupertinoIcons.person_3,
+                          color: Color(0xFF808080),
+                        ),
+                      ),
+                      style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: SizeConfig.textMultiplier * 1.8,
                       ),
                     ),
                   ),
@@ -505,20 +536,27 @@ class _StepperHomeState extends State<StepperHome> {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.heightMultiplier * 2),
-                      child: TextFormField(
-                        controller: totalMaleLocalEmployees,
-                        cursorColor: AppColors.primaryColor,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: 'Total male (Local employee)',
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: SizeConfig.textMultiplier * 1.8,
-                          ),
+                    child: TextFormField(
+                      controller: totalMaleLocalEmployees,
+                      cursorColor: AppColors.primaryColor,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                        hintText: 'Total male (Local employee)',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: AppColors.primaryColor.withOpacity(0.5),
+                          fontSize: SizeConfig.textMultiplier * 1.8,
                         ),
+                        prefixIcon: const Icon(
+                          Icons.boy_outlined,
+                          color: Color(0xFF808080),
+                        ),
+                      ),
+                      style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: SizeConfig.textMultiplier * 1.8,
                       ),
                     ),
                   ),
@@ -538,20 +576,27 @@ class _StepperHomeState extends State<StepperHome> {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.heightMultiplier * 2),
-                      child: TextFormField(
-                        controller: totalFemaleLocalEmployees,
-                        cursorColor: AppColors.primaryColor,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: 'Total female (Local employee)',
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: SizeConfig.textMultiplier * 1.8,
-                          ),
+                    child: TextFormField(
+                      controller: totalFemaleLocalEmployees,
+                      cursorColor: AppColors.primaryColor,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                        hintText: 'Total female (Local employee)',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: AppColors.primaryColor.withOpacity(0.5),
+                          fontSize: SizeConfig.textMultiplier * 1.8,
                         ),
+                        prefixIcon: const Icon(
+                          Icons.girl,
+                          color: Color(0xFF808080),
+                        ),
+                      ),
+                      style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: SizeConfig.textMultiplier * 1.8,
                       ),
                     ),
                   ),
@@ -571,20 +616,27 @@ class _StepperHomeState extends State<StepperHome> {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.heightMultiplier * 2),
-                      child: TextFormField(
-                        controller: minimumWageLocalEmployees,
-                        cursorColor: AppColors.primaryColor,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: 'Minimum wage (Local employee)',
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: SizeConfig.textMultiplier * 1.8,
-                          ),
+                    child: TextFormField(
+                      controller: minimumWageLocalEmployees,
+                      cursorColor: AppColors.primaryColor,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                        hintText: 'Minimum wage (Local employee)',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: AppColors.primaryColor.withOpacity(0.5),
+                          fontSize: SizeConfig.textMultiplier * 1.8,
                         ),
+                        prefixIcon: const Icon(
+                          CupertinoIcons.money_dollar,
+                          color: Color(0xFF808080),
+                        ),
+                      ),
+                      style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: SizeConfig.textMultiplier * 1.8,
                       ),
                     ),
                   ),
@@ -604,20 +656,27 @@ class _StepperHomeState extends State<StepperHome> {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.heightMultiplier * 2),
-                      child: TextFormField(
-                        controller: highestWageLocalEmployees,
-                        cursorColor: AppColors.primaryColor,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: 'Highest wage (Local employee)',
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: SizeConfig.textMultiplier * 1.8,
-                          ),
+                    child: TextFormField(
+                      controller: highestWageLocalEmployees,
+                      cursorColor: AppColors.primaryColor,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                        hintText: 'Highest wage (Local employee)',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: AppColors.primaryColor.withOpacity(0.5),
+                          fontSize: SizeConfig.textMultiplier * 1.8,
                         ),
+                        prefixIcon: const Icon(
+                          CupertinoIcons.money_dollar_circle,
+                          color: Color(0xFF808080),
+                        ),
+                      ),
+                      style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: SizeConfig.textMultiplier * 1.8,
                       ),
                     ),
                   ),
@@ -637,20 +696,28 @@ class _StepperHomeState extends State<StepperHome> {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.heightMultiplier * 2),
-                      child: TextFormField(
-                        controller: minimumWageForeignEmployees,
-                        cursorColor: AppColors.primaryColor,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: 'Minimum wage foreigner',
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: SizeConfig.textMultiplier * 1.8,
-                          ),
+                    child: TextFormField(
+                      controller: minimumWageForeignEmployees,
+                      cursorColor: AppColors.primaryColor,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                        hintText: 'Minimum wage foreigner',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: AppColors.primaryColor.withOpacity(0.5),
+                          fontSize: SizeConfig.textMultiplier * 1.8,
                         ),
+                        //
+                        prefixIcon: const Icon(
+                          CupertinoIcons.money_euro,
+                          color: Color(0xFF808080),
+                        ),
+                      ),
+                      style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: SizeConfig.textMultiplier * 1.8,
                       ),
                     ),
                   ),
@@ -670,20 +737,27 @@ class _StepperHomeState extends State<StepperHome> {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.heightMultiplier * 2),
-                      child: TextFormField(
-                        controller: highestWageForeignEmployees,
-                        cursorColor: AppColors.primaryColor,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: 'Highest foreigner wage',
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: SizeConfig.textMultiplier * 1.8,
-                          ),
+                    child: TextFormField(
+                      controller: highestWageForeignEmployees,
+                      cursorColor: AppColors.primaryColor,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                        hintText: 'Highest foreigner wage',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: AppColors.primaryColor.withOpacity(0.5),
+                          fontSize: SizeConfig.textMultiplier * 1.8,
                         ),
+                        prefixIcon: const Icon(
+                          CupertinoIcons.money_euro_circle,
+                          color: Color(0xFF808080),
+                        ),
+                      ),
+                      style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: SizeConfig.textMultiplier * 1.8,
                       ),
                     ),
                   ),
@@ -697,6 +771,13 @@ class _StepperHomeState extends State<StepperHome> {
   }
 
   Widget officerRecommendations() {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    Color? textColor;
+    if (themeProvider.isDarkMode) {
+      textColor = Colors.white;
+    } else {
+      textColor = AppColors.primaryColor;
+    }
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -705,7 +786,7 @@ class _StepperHomeState extends State<StepperHome> {
             child: Text(
               'Officer Recommendations',
               style: TextStyle(
-                color: AppColors.primaryColor,
+                color: textColor,
                 fontSize: SizeConfig.textMultiplier * 2,
               ),
             ),
@@ -748,6 +829,10 @@ class _StepperHomeState extends State<StepperHome> {
                             fontSize: SizeConfig.textMultiplier * 1.8,
                           ),
                         ),
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: SizeConfig.textMultiplier * 2,
+                        ),
                       ),
                     ),
                   ),
@@ -780,6 +865,10 @@ class _StepperHomeState extends State<StepperHome> {
                             color: AppColors.primaryColor,
                             fontSize: SizeConfig.textMultiplier * 1.8,
                           ),
+                        ),
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: SizeConfig.textMultiplier * 2,
                         ),
                       ),
                     ),
@@ -814,6 +903,10 @@ class _StepperHomeState extends State<StepperHome> {
                             fontSize: SizeConfig.textMultiplier * 1.8,
                           ),
                         ),
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: SizeConfig.textMultiplier * 2,
+                        ),
                       ),
                     ),
                   ),
@@ -844,6 +937,11 @@ class _StepperHomeState extends State<StepperHome> {
                             prefixIcon: Icon(
                               Icons.calendar_today,
                               size: SizeConfig.heightMultiplier * 2.5,
+                              color: const Color(0xFF808080),
+                            ),
+                            hintStyle: TextStyle(
+                              color: const Color(0xFF808080),
+                              fontSize: SizeConfig.textMultiplier * 2,
                             ),
                           ),
                         ),
@@ -859,11 +957,14 @@ class _StepperHomeState extends State<StepperHome> {
     );
   }
 
-  submitData() {
+  submitData() async {
     String url = Config.saveSurvey;
     Dio dio = Dio();
     Options options = Options();
-    options.contentType = 'application/x-www-form-urlencoded';
+    options.contentType = "form-data";
+
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? auth_token = pref.getString(Config.token);
 
     List<Map<String, dynamic>> foreignEmployees = [];
     for (var i = 0; i < employeeForms.length; i++) {
@@ -878,14 +979,55 @@ class _StepperHomeState extends State<StepperHome> {
       employee.gender = form.gender ?? '';
       foreignEmployees.add(employee.toMap());
     }
-    dynamic postedData = "foreign_employees=$foreignEmployees&number_of_local_employees=${totalLocalEmployees.text.trim()}&"
-        "male_employees=${totalMaleLocalEmployees.text.trim()}&female_employees=${totalFemaleLocalEmployees.text.trim()}&"
-        "locals_minimum_wage=${minimumWageLocalEmployees.text.trim()}&locals_highest_wage=${highestWageLocalEmployees.text.trim()}&"
-        "foreigners_minimum_wage=${minimumWageForeignEmployees.text.trim()}&foreigners_highest_wage=${highestWageForeignEmployees.text.trim()}&"
-        "officer_recommendations=${recommendations.text.trim()}&person_attended=${personAttendedName.text.trim()}&"
-        "person_position=${personAttendedPosition.text.trim()}&survey_date=${surveyDate.toString().substring(0, 10)}";
 
-    print("Data: 🥵 $postedData");
+    FormData formData = FormData.fromMap({
+      "authorization": "Bearer $auth_token",
+      "survey_reference": widget.refNumber,
+      "foreign_employees": "$foreignEmployees",
+      "number_of_local_employees": totalLocalEmployees.text.trim(),
+      "male_employees": totalMaleLocalEmployees.text.trim(),
+      "female_employees": totalFemaleLocalEmployees.text.trim(),
+      "locals_minimum_wage": minimumWageLocalEmployees.text.trim(),
+      "locals_highest_wage": highestWageLocalEmployees.text.trim(),
+      "foreigners_minimum_wage": minimumWageForeignEmployees.text.trim(),
+      "foreigners_highest_wage": highestWageForeignEmployees.text.trim(),
+      "officer_recommendations": recommendations.text.trim(),
+      "person_attended": personAttendedName.text.trim(),
+      "person_position": personAttendedPosition.text.trim(),
+      "survey_date": surveyDate.toString().substring(0, 10)
+    });
+
+    print("My Data: 🥵 ${formData.fields}");
+    DialogBuilder(context).showLoadingIndicator('Saving');
+
+    try {
+      Response response = await dio.post(
+        url,
+        data: formData,
+        options: options,
+      );
+      debugPrint('Save response: $response');
+      dynamic decodedResponse = jsonDecode(response.toString());
+      dynamic saveResult = decodedResponse["response"];
+      dynamic code = saveResult["code"];
+      dynamic message = saveResult["message"];
+
+      debugPrint("Code: $code");
+
+      if (code == 200) {
+        DialogBuilder(context).hideOpenDialog();
+        showDialog(context: context, builder: (_) => ConfirmDialog(data: widget.splashData));
+      } else {
+        DialogBuilder(context).hideOpenDialog();
+        Config.customFlushbar("Notice", message, context);
+      }
+    } on DioException catch (Exception) {
+      DialogBuilder(context).hideOpenDialog();
+      Config.customFlushbar("Network error", "Please check your internet", context);
+    } catch (Exception) {
+      DialogBuilder(context).hideOpenDialog();
+      Config.customFlushbar("Notice", Exception.toString(), context);
+    }
   }
 }
 
@@ -893,16 +1035,20 @@ class EmployeeForm extends StatefulWidget {
   final TextEditingController employeeNameController = TextEditingController();
   final TextEditingController positionController = TextEditingController();
   final TextEditingController passportController = TextEditingController();
+  final dynamic splashData;
   String? nationality;
   DateTime? startDate;
   DateTime? endDate;
   String? gender;
+  EmployeeForm({super.key, this.splashData});
   @override
-  _EmployeeFormState createState() => _EmployeeFormState();
+  State<EmployeeForm> createState() => _EmployeeFormState();
 }
 
 class _EmployeeFormState extends State<EmployeeForm> {
   final _formKey = GlobalKey<FormState>();
+  List<dynamic> nationalitiesDropdownItems = [];
+  List<dynamic> genderDropdownItems = [];
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
     final DateTime? picked = await showDatePicker(
@@ -941,6 +1087,15 @@ class _EmployeeFormState extends State<EmployeeForm> {
   }
 
   @override
+  void initState() {
+    setState(() {
+      nationalitiesDropdownItems = widget.splashData['nationalities'];
+      genderDropdownItems = widget.splashData['genders'];
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
@@ -970,6 +1125,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
                 child: TextFormField(
                   controller: widget.employeeNameController,
                   cursorColor: AppColors.primaryColor,
+                  textInputAction: TextInputAction.next,
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
                     hintText: 'Enter employee name',
@@ -978,8 +1134,14 @@ class _EmployeeFormState extends State<EmployeeForm> {
                       color: AppColors.primaryColor.withOpacity(0.3),
                       fontSize: SizeConfig.textMultiplier * 1.8,
                     ),
-                    // textAlignVertical: TextAlignVertical.center,
-                    prefixIcon: const Icon(CupertinoIcons.person),
+                    prefixIcon: const Icon(
+                      CupertinoIcons.person,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                  style: TextStyle(
+                    fontSize: SizeConfig.textMultiplier * 2,
+                    color: AppColors.primaryColor,
                   ),
                 ),
               ),
@@ -1003,6 +1165,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
                   controller: widget.positionController,
                   cursorColor: AppColors.primaryColor,
                   textAlignVertical: TextAlignVertical.center,
+                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     hintText: 'Enter employee position',
                     border: InputBorder.none,
@@ -1010,7 +1173,14 @@ class _EmployeeFormState extends State<EmployeeForm> {
                       color: AppColors.primaryColor.withOpacity(0.3),
                       fontSize: SizeConfig.textMultiplier * 1.8,
                     ),
-                    prefixIcon: const Icon(CupertinoIcons.square_favorites),
+                    prefixIcon: const Icon(
+                      CupertinoIcons.square_favorites,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                  style: TextStyle(
+                    fontSize: SizeConfig.textMultiplier * 2,
+                    color: AppColors.primaryColor,
                   ),
                 ),
               ),
@@ -1030,30 +1200,38 @@ class _EmployeeFormState extends State<EmployeeForm> {
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(5),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: DropdownButtonFormField<String>(
-                    value: widget.nationality,
-                    decoration: InputDecoration(
-                        hintText: 'Select nationality',
-                        border: InputBorder.none,
-                        prefixIcon: const Icon(Icons.language),
-                        hintStyle: TextStyle(
-                          color: AppColors.primaryColor.withOpacity(0.3),
-                        )),
-                    items: <String>['American', 'British', 'Chinese', 'Indian', 'Other'].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        widget.nationality = newValue;
-                      });
-                    },
-                    validator: (value) => value == null ? 'Please select a nationality' : null,
+                child: DropdownButtonFormField<String>(
+                  value: widget.nationality,
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    hintText: 'Select nationality',
+                    border: InputBorder.none,
+                    prefixIcon: const Icon(
+                      Icons.language,
+                      color: AppColors.primaryColor,
+                    ),
+                    hintStyle: TextStyle(
+                      color: AppColors.primaryColor.withOpacity(0.3),
+                    ),
                   ),
+                  items: nationalitiesDropdownItems.map((item) {
+                    return DropdownMenuItem<String>(
+                      value: item['id'],
+                      child: Text(
+                        item['nationality'],
+                        style: TextStyle(
+                          fontSize: SizeConfig.textMultiplier * 2,
+                          color: const Color(0xFF808080),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      widget.nationality = newValue;
+                    });
+                  },
+                  validator: (value) => value == null ? 'Please select a nationality' : null,
                 ),
               ),
               SizedBox(height: SizeConfig.heightMultiplier * 1),
@@ -1076,6 +1254,7 @@ class _EmployeeFormState extends State<EmployeeForm> {
                   controller: widget.passportController,
                   cursorColor: AppColors.primaryColor,
                   textAlignVertical: TextAlignVertical.center,
+                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     hintText: 'Enter Passport Number',
                     border: InputBorder.none,
@@ -1084,7 +1263,14 @@ class _EmployeeFormState extends State<EmployeeForm> {
                       fontSize: SizeConfig.textMultiplier * 1.8,
                     ),
                     //
-                    prefixIcon: const Icon(CupertinoIcons.book),
+                    prefixIcon: const Icon(
+                      CupertinoIcons.book,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                  style: TextStyle(
+                    fontSize: SizeConfig.textMultiplier * 2,
+                    color: AppColors.primaryColor,
                   ),
                 ),
               ),
@@ -1111,16 +1297,25 @@ class _EmployeeFormState extends State<EmployeeForm> {
                     decoration: InputDecoration(
                       hintText: 'Select Gender',
                       border: InputBorder.none,
-                      prefixIcon: const Icon(CupertinoIcons.person_2),
+                      prefixIcon: const Icon(
+                        CupertinoIcons.person_2,
+                        color: AppColors.primaryColor,
+                      ),
                       hintStyle: TextStyle(
                         color: AppColors.primaryColor.withOpacity(0.3),
                         fontSize: SizeConfig.textMultiplier * 1.8,
                       ),
                     ),
-                    items: <String>['Male', 'Female', 'Other'].map((String value) {
+                    items: genderDropdownItems.map((item) {
                       return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
+                        value: item['id'],
+                        child: Text(
+                          item['name'],
+                          style: TextStyle(
+                            fontSize: SizeConfig.textMultiplier * 2,
+                            color: const Color(0xFF808080),
+                          ),
+                        ),
                       );
                     }).toList(),
                     onChanged: (String? newValue) {
@@ -1167,6 +1362,11 @@ class _EmployeeFormState extends State<EmployeeForm> {
                                   prefixIcon: Icon(
                                     Icons.calendar_today,
                                     size: SizeConfig.heightMultiplier * 2.5,
+                                    color: const Color(0xFF808080),
+                                  ),
+                                  hintStyle: TextStyle(
+                                    fontSize: SizeConfig.textMultiplier * 2,
+                                    color: const Color(0xFF808080),
                                   ),
                                 ),
                               ),
@@ -1209,6 +1409,11 @@ class _EmployeeFormState extends State<EmployeeForm> {
                                   prefixIcon: Icon(
                                     Icons.calendar_today,
                                     size: SizeConfig.heightMultiplier * 2.5,
+                                    color: const Color(0xFF808080),
+                                  ),
+                                  hintStyle: TextStyle(
+                                    fontSize: SizeConfig.textMultiplier * 2,
+                                    color: const Color(0xFF808080),
                                   ),
                                 ),
                               ),

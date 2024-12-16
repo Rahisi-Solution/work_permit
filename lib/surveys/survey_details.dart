@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wps_survey/survey_checkllist/stepper_home.dart';
 
 import '../helper/appcolors.dart';
 import '../helper/size_config.dart';
+import '../provider/theme_provider.dart';
 
 class SurveyDetails extends StatefulWidget {
-  const SurveyDetails({super.key});
+  final dynamic splashData;
+  final dynamic data;
+  const SurveyDetails({super.key, this.splashData, this.data});
 
   @override
   State<SurveyDetails> createState() => _SurveyDetailsState();
@@ -15,8 +19,20 @@ class SurveyDetails extends StatefulWidget {
 class _SurveyDetailsState extends State<SurveyDetails> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    Color? backgroundColor;
+    if (themeProvider.isDarkMode) {
+      backgroundColor = Colors.blueGrey[100];
+    } else {
+      backgroundColor = AppColors.primaryColor.withOpacity(0.05);
+    }
+    return Container(
       width: SizeConfig.widthMultiplier * 100,
+      height: SizeConfig.heightMultiplier * 60,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        color: backgroundColor,
+      ),
       child: Padding(
         padding: EdgeInsets.only(left: SizeConfig.widthMultiplier * 3, right: SizeConfig.widthMultiplier * 3),
         child: Stack(
@@ -45,13 +61,14 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                       ),
                     ),
                     IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(
-                          CupertinoIcons.xmark_circle,
-                          color: AppColors.primaryColor,
-                        ))
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        CupertinoIcons.xmark_circle,
+                        color: AppColors.primaryColor,
+                      ),
+                    )
                   ],
                 ),
                 Text(
@@ -63,7 +80,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                   ),
                 ),
                 Text(
-                  "WPS12345",
+                  widget.data["reference_number"],
                   style: TextStyle(
                     fontSize: SizeConfig.textMultiplier * 2,
                     color: AppColors.primaryColor,
@@ -80,7 +97,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                   ),
                 ),
                 Text(
-                  "Golden Tulip Luxury Hotel",
+                  widget.data["institution"],
                   style: TextStyle(
                     fontSize: SizeConfig.textMultiplier * 2,
                     color: AppColors.primaryColor,
@@ -97,7 +114,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                   ),
                 ),
                 Text(
-                  "Mazizini, Jumbi Kilimani",
+                  widget.data["location"],
                   style: TextStyle(
                     fontSize: SizeConfig.textMultiplier * 2,
                     color: AppColors.primaryColor,
@@ -106,7 +123,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                 ),
                 Divider(color: AppColors.secondaryColor.withOpacity(0.06)),
                 Text(
-                  "Type of business",
+                  "Status",
                   style: TextStyle(
                     fontSize: SizeConfig.textMultiplier * 2,
                     color: Color(0xFF588157),
@@ -114,7 +131,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                   ),
                 ),
                 Text(
-                  "Sales and accommodation",
+                  widget.data["status"],
                   style: TextStyle(
                     fontSize: SizeConfig.textMultiplier * 2,
                     color: AppColors.primaryColor,
@@ -126,7 +143,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Status",
+                      "Created date",
                       style: TextStyle(
                         fontSize: SizeConfig.textMultiplier * 2,
                         color: Color(0xFF38a3a5),
@@ -134,7 +151,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                       ),
                     ),
                     Text(
-                      "New",
+                      widget.data["initiated_date"],
                       style: TextStyle(
                         fontSize: SizeConfig.textMultiplier * 2,
                         color: AppColors.primaryColor,
@@ -143,41 +160,45 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                     ),
                   ],
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 4)
+                Divider(color: AppColors.secondaryColor.withOpacity(0.06)),
               ],
             ),
-            Positioned(
-              bottom: 5,
-              left: 0,
-              right: 0,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => StepperHome(),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: SizeConfig.heightMultiplier * 6,
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Start survey",
-                      style: TextStyle(
-                        fontSize: SizeConfig.textMultiplier * 2,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
+            widget.data["status"] == "Pending Survey"
+                ? Positioned(
+                    bottom: SizeConfig.heightMultiplier * 3,
+                    left: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => StepperHome(
+                              splashData: widget.splashData,
+                              refNumber: widget.data["reference_number"],
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: SizeConfig.heightMultiplier * 6,
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Start survey",
+                            style: TextStyle(
+                              fontSize: SizeConfig.textMultiplier * 2,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-            )
+                  )
+                : Container(),
           ],
         ),
       ),

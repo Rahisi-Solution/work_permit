@@ -40,6 +40,14 @@ dependencies:
   qr_code_scanner: ^1.0.1
   dio: ^5.7.0
   im_stepper: ^1.0.1+1
+  shared_preferences:
+  sqflite:
+  path_provider:
+  provider:
+  http:
+  flutter_barcode_scanner:
+  avoid_keyboard:
+  intl:
 
 dev_dependencies:
   flutter_test:

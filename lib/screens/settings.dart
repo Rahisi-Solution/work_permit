@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wps_survey/screens/logout.dart';
+import 'package:provider/provider.dart';
+import 'package:wps_survey/authentication/change_password.dart';
+import 'package:wps_survey/authentication/logout.dart';
 import 'package:wps_survey/screens/report.dart';
-import 'package:wps_survey/screens/reset_password.dart';
 
 import '../helper/appcolors.dart';
 import '../helper/size_config.dart';
+import '../provider/theme_provider.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({super.key});
+  final dynamic splashData;
+  const Settings({super.key, this.splashData});
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -16,10 +19,17 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings',
+        title: Text(
+          'Settings',
           style: TextStyle(
             fontSize: SizeConfig.textMultiplier * 2.5,
             color: Colors.white,
@@ -55,11 +65,32 @@ class _SettingsState extends State<Settings> {
             title: const Text('Change Password'),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
-              showDialog(
-                context: context,
-                barrierDismissible: true,
-                builder: (_) => const ResetPassword(),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const ChangePassword(),
+                ),
               );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.light_mode_outlined),
+            title: const Text('Dark theme'),
+            // trailing: SizedBox(
+            //   width: SizeConfig.widthMultiplier * 50,
+            //   child: _toggleButton(),
+            // ),
+            trailing: Switch(
+              value: themeProvider.isDarkMode,
+              onChanged: (_) {
+                themeProvider.toggleTheme();
+              },
+              activeColor: Colors.white12,
+              activeTrackColor: Colors.white,
+              splashRadius: 20,
+            ),
+            onTap: () {
+              themeProvider.toggleTheme();
             },
           ),
           ListTile(
@@ -67,11 +98,11 @@ class _SettingsState extends State<Settings> {
             title: const Text('Logout'),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
-                showDialog(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (_) => const Logout(),
-                );
+              showDialog(
+                context: context,
+                barrierDismissible: true,
+                builder: (_) => const Logout(),
+              );
             },
           ),
         ],

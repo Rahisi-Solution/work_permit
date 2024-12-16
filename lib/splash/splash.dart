@@ -1,12 +1,8 @@
 import 'dart:async';
 
-import 'package:another_flushbar/flushbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wps_survey/authentication/login.dart';
-
-import '../helper/helper.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -21,7 +17,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   void initState() {
     super.initState();
     _startTimer();
-    // _fetchInitialData();
   }
 
   @override
@@ -30,11 +25,16 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   }
 
   _startTimer() {
-    Timer(const Duration(seconds: 3), _handleTimeout);
+    Timer(const Duration(seconds: 5), _handleTimeout);
   }
 
   _handleTimeout() {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => const Login()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const Login(),
+      ),
+    );
   }
 
   @override
@@ -118,23 +118,5 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
         ),
       ),
     );
-  }
-
-  void _fetchInitialData() async {
-    ConnectivityHelper.isDeviceConnected().then((isConnected) async {
-      if (isConnected) {
-      } else {
-        return Flushbar(
-          message: 'Offline device',
-          flushbarPosition: FlushbarPosition.TOP,
-          backgroundColor: const Color(0xFFdb3a34),
-          icon: const Icon(
-            CupertinoIcons.exclamationmark_triangle_fill,
-            color: Colors.white,
-          ),
-          duration: const Duration(seconds: 5),
-        )..show(context);
-      }
-    });
   }
 }

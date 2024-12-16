@@ -5,10 +5,24 @@ import 'package:flutter/material.dart';
 import '../helper/size_config.dart';
 
 class Config {
-  static const String endPoint = 'https://earrival.rahisi.co.tz/api/pos/';
+  /* Online */
+  static const String endPoint = 'https://labour.rahisi.co.tz/api/';
 
-  static const String officerLogin = '${endPoint}officer_login';
-  static const String saveSurvey = '${endPoint}save_survey';
+  // Local endpoints
+  // static const String endPoint = 'http://172.16.10.182:7000/api/'; // John
+  // static const String endPoint = 'http://172.16.10.158:8000/api/'; // Frolian
+
+  static const String appSplash = '${endPoint}app/splash';
+  static const String officerLogin = '${endPoint}login';
+  static const String saveSurvey = '${endPoint}app/save_checklist';
+  static const String allSurveys = '${endPoint}app/all_surveys';
+  static const String viewSurvey = '${endPoint}app/view_survey';
+  static const String verifyPermit = '${endPoint}app/verify_permit';
+  static const String changePassword = '${endPoint}change_password';
+  static const String resetPassword = '${endPoint}reset_password';
+
+  static const String token = "app_token";
+  static const String username = "username";
 
   static Future customFlushbar(String title, String notice, BuildContext context) {
     return Flushbar(
