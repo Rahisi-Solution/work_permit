@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wps_survey/helper/size_config.dart';
 
-import '../../helper/appcolors.dart';
+import '../helper/appcolors.dart';
 
 class Step5 extends StatefulWidget {
   const Step5({super.key});
@@ -42,13 +42,13 @@ class Step5 extends StatefulWidget {
   static TextEditingController workersNightShift = TextEditingController();
 
   // Controllers for deadlines fields
-  static TextEditingController deadlineMedical = TextEditingController();
-  static TextEditingController deadlineVentilation = TextEditingController();
-  static TextEditingController deadlineLighting = TextEditingController();
-  static TextEditingController deadlineNoising = TextEditingController();
-  static TextEditingController deadlineFire = TextEditingController();
-  static TextEditingController deadlineFirstAid = TextEditingController();
-  static TextEditingController deadlineProtectiveEquipments = TextEditingController();
+  static TextEditingController deadlineWorkersAccommodation = TextEditingController();
+  static TextEditingController deadlineOneHourBreak = TextEditingController();
+  static TextEditingController deadlineSexualHarassment = TextEditingController();
+  static TextEditingController deadlineHIVAIDS = TextEditingController();
+  static TextEditingController deadlineChildLabour = TextEditingController();
+  static TextEditingController deadlineDisabledPeople = TextEditingController();
+  static TextEditingController deadlineNightShift = TextEditingController();
 
   @override
   State<Step5> createState() => _Step5State();
@@ -73,79 +73,79 @@ class _Step5State extends State<Step5> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '11) Medical treatments',
+                '13) Workers accommodation',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                 ),
               ),
-              _medical(),
+              _workersAndAccommodation(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               const Divider(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               Text(
-                '12) Safety and health',
+                '14) One hour break',
+                style: TextStyle(
+                  fontSize: SizeConfig.textMultiplier * 2,
+                ),
+              ),
+              _oneHourBreak(),
+              SizedBox(height: SizeConfig.heightMultiplier * 2),
+              const Divider(),
+              SizedBox(height: SizeConfig.heightMultiplier * 2),
+              Text(
+                '15) Sexual harassment',
+                style: TextStyle(
+                  fontSize: SizeConfig.textMultiplier * 2,
+                ),
+              ),
+              _sexualHarassment(),
+              SizedBox(height: SizeConfig.heightMultiplier * 2),
+              const Divider(),
+              SizedBox(height: SizeConfig.heightMultiplier * 2),
+              Text(
+                '16) Vulnerable group',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
-                'a) Ventilation',
+                'a) HIV and AIDS',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                 ),
               ),
-              _ventilation(),
+              _hivAids(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               const Divider(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               Text(
-                'b) Lighting',
+                'b) Child labour',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                 ),
               ),
-              _lighting(),
+              _childLabour(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               const Divider(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               Text(
-                'c) Noising',
+                'c) People with disability',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                 ),
               ),
-              _noising(),
+              _disabledPeople(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               const Divider(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               Text(
-                'd) Fire extinguishers',
+                '17) Night shift',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                 ),
               ),
-              _fire(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              const Divider(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              Text(
-                'e) First aid kit',
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                ),
-              ),
-              _firstAid(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              const Divider(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              Text(
-                'f) Personal protective equipments',
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                ),
-              ),
-              _protectiveEquipments(),
+              _nightShift(),
             ],
           ),
         ),
@@ -153,7 +153,7 @@ class _Step5State extends State<Step5> {
     );
   }
 
-  _medical() {
+  _workersAndAccommodation() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -300,7 +300,7 @@ class _Step5State extends State<Step5> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step5.deadlineMedical,
+                controller: Step5.deadlineWorkersAccommodation,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -329,7 +329,7 @@ class _Step5State extends State<Step5> {
     );
   }
 
-  _ventilation() {
+  _oneHourBreak() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -476,7 +476,7 @@ class _Step5State extends State<Step5> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step5.deadlineVentilation,
+                controller: Step5.deadlineOneHourBreak,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -505,7 +505,7 @@ class _Step5State extends State<Step5> {
     );
   }
 
-  _lighting() {
+  _sexualHarassment() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -652,7 +652,7 @@ class _Step5State extends State<Step5> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step5.deadlineLighting,
+                controller: Step5.deadlineSexualHarassment,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -681,7 +681,7 @@ class _Step5State extends State<Step5> {
     );
   }
 
-  _noising() {
+  _hivAids() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -828,7 +828,7 @@ class _Step5State extends State<Step5> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step5.deadlineNoising,
+                controller: Step5.deadlineHIVAIDS,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -857,7 +857,7 @@ class _Step5State extends State<Step5> {
     );
   }
 
-  _fire() {
+  _childLabour() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -1004,7 +1004,7 @@ class _Step5State extends State<Step5> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step5.deadlineFire,
+                controller: Step5.deadlineChildLabour,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -1033,7 +1033,7 @@ class _Step5State extends State<Step5> {
     );
   }
 
-  _firstAid() {
+  _disabledPeople() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -1180,7 +1180,7 @@ class _Step5State extends State<Step5> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step5.deadlineFirstAid,
+                controller: Step5.deadlineDisabledPeople,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -1209,7 +1209,7 @@ class _Step5State extends State<Step5> {
     );
   }
 
-  _protectiveEquipments() {
+  _nightShift() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -1356,7 +1356,7 @@ class _Step5State extends State<Step5> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step5.deadlineProtectiveEquipments,
+                controller: Step5.deadlineNightShift,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,

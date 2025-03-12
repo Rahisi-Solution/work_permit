@@ -24,8 +24,9 @@ class _SurveyScreenState extends State<SurveyScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         centerTitle: true,
+        automaticallyImplyLeading: false,
         title: Text(
-          "Surveys",
+          "Inspections",
           style: TextStyle(
             fontSize: SizeConfig.textMultiplier * 2.5,
             color: Colors.white,
@@ -35,9 +36,10 @@ class _SurveyScreenState extends State<SurveyScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(
+          icon: Icon(
             CupertinoIcons.back,
             color: Colors.white,
+            size: SizeConfig.widthMultiplier * 7,
           ),
         ),
       ),

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wps_survey/helper/size_config.dart';
@@ -16,6 +17,7 @@ import 'package:wps_survey/utils/config.dart';
 import '../helper/appcolors.dart';
 import '../provider/theme_provider.dart';
 import '../result/permit_result.dart';
+import '../utils/database_helper.dart';
 import '../widgets/dialog_helper.dart';
 import '../widgets/slide_up.dart';
 
@@ -31,10 +33,13 @@ class _HomeState extends State<Home> {
   String username = "";
   String _scanBarcode = 'Unknown';
   Color? cardColor;
+  String currentDate = "";
+  String currentTime = "";
 
   @override
   void initState() {
     _prepareData();
+    _getCurrentDateTime();
     super.initState();
   }
 
@@ -199,7 +204,7 @@ class _HomeState extends State<Home> {
                       ),
                       Center(
                         child: Text(
-                          "surveys".toUpperCase(),
+                          "Inspections".toUpperCase(),
                           style: TextStyle(
                             fontSize: SizeConfig.textMultiplier * 2.5,
                             color: cardColor,
@@ -387,7 +392,7 @@ class _HomeState extends State<Home> {
     _verifyPermit(refNumber);
   }
 
-  _verifyPermit(String reference) async {
+  _verifyPermit(String permitNumber) async {
     String url = Config.verifyPermit;
     Dio dio = Dio();
     Options options = Options();
@@ -397,7 +402,7 @@ class _HomeState extends State<Home> {
     String? token = preferences.getString(Config.token);
 
     String postedData = "authorization=Bearer $token&permit_number=X9465/2425/ZP";
-    // String postedData = "authorization=Bearer $token&permit_number=$reference";
+    // String postedData = "authorization=Bearer $token&permit_number=$permitNumber";
 
     try {
       Response response = await dio.post(
@@ -416,6 +421,7 @@ class _HomeState extends State<Home> {
       if (code == 200) {
         dynamic data = decodedResult["data"];
         DialogBuilder(context).hideOpenDialog();
+        _insertValidPermit(permitNumber);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -428,10 +434,27 @@ class _HomeState extends State<Home> {
       } else {
         DialogBuilder(context).hideOpenDialog();
         Config.customFlushbar("Notice", message, context);
+        _insertInvalidPermit(permitNumber);
       }
     } catch (Exception) {
       debugPrint("Exception on certificate verification: ${Exception}");
       Config.customFlushbar("Notice", Exception.toString(), context);
     }
+  }
+
+  void _getCurrentDateTime() {
+    DateTime now = DateTime.now();
+    currentDate = DateFormat('dd-MM-yyyy').format(now);
+    currentTime = DateFormat('HH:mm:ss').format(now);
+  }
+
+  Future<void> _insertValidPermit(String permitNumber) async {
+    final dbHelper = DatabaseHelper();
+    await dbHelper.insertValidPermit(permitNumber, currentDate, currentTime);
+  }
+
+  Future<void> _insertInvalidPermit(String permitNumber) async {
+    final dbHelper = DatabaseHelper();
+    await dbHelper.insertInvalidPermit(permitNumber, currentDate, currentTime);
   }
 }

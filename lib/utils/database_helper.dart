@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -20,8 +21,8 @@ class DatabaseHelper {
     return await openDatabase(
       path,
       version: 1,
-      onCreate: (db, version) {
-        return db.execute('''
+      onCreate: (db, version) async {
+        await db.execute('''
           CREATE TABLE surveys(
             reference_number TEXT PRIMARY KEY,
             institution TEXT,
@@ -31,6 +32,22 @@ class DatabaseHelper {
             status_color TEXT
           )
         ''');
+        await db.execute('''
+        CREATE TABLE valid_permits(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        permit_number TEXT,
+        date TEXT,
+        time TEXT
+        )
+        ''');
+        await db.execute('''
+        CREATE TABLE invalid_permits(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        permit_number TEXT,
+        date TEXT,
+        time TEXT
+        )
+        ''');
       },
     );
   }
@@ -39,6 +56,38 @@ class DatabaseHelper {
     final db = await database;
     await db.insert('surveys', survey, conflictAlgorithm: ConflictAlgorithm.replace);
     print("Tuna insert: $survey");
+  }
+
+  Future<void> insertValidPermit(String permitNumber, String date, String time) async {
+    final db = await database;
+    await db.insert('valid_permits', {
+      'permit_number': permitNumber,
+      'date': date,
+      'time': time,
+    });
+    debugPrint("Inserting valid successfully");
+  }
+
+  Future<void> insertInvalidPermit(String permitNumber, String date, String time) async {
+    final db = await database;
+    await db.insert('invalid_permits', {
+      'permit_number': permitNumber,
+      'date': date,
+      'time': time,
+    });
+    debugPrint("Inserting invalid successfully");
+  }
+
+  Future<int> totalValidPermits() async {
+    final db = await database;
+    final result = await db.rawQuery('SELECT COUNT(*) as total FROM valid_permits');
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
+
+  Future<int> totalInvalidPermits() async {
+    final db = await database;
+    final result = await db.rawQuery('SELECT COUNT(*) as total FROM invalid_permits');
+    return Sqflite.firstIntValue(result) ?? 0;
   }
 
   Future<List<Map<String, dynamic>>> getSurveys() async {
@@ -60,8 +109,41 @@ class DatabaseHelper {
       whereArgs: [referenceNumber],
     );
     if (results.isNotEmpty) {
-      return results.first; // Return the first (and only) result
+      return results.first;
     }
-    return null; // Return null if no survey is found
+    return null;
+  }
+
+  Future<int> totalSurveys() async {
+    final db = await database;
+    final result = await db.rawQuery('SELECT COUNT(*) as total FROM surveys');
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
+
+  Future<int> totalPendingInspections() async {
+    final db = await database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as total FROM surveys WHERE status = ?',
+      ['Pending Survey'],
+    );
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
+
+  Future<int> totalCompleteInspections() async {
+    final db = await database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as total FROM surveys WHERE status = ?',
+      ['Completed'],
+    );
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
+
+  Future<int> totalRejectedInspections() async {
+    final db = await database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as total FROM surveys WHERE status = ?',
+      ['Rejected'],
+    );
+    return Sqflite.firstIntValue(result) ?? 0;
   }
 }

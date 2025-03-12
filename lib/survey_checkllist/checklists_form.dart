@@ -16,16 +16,16 @@ import '../models/employee_model.dart';
 import '../provider/theme_provider.dart';
 import '../widgets/dialog_helper.dart';
 
-class StepperHome extends StatefulWidget {
+class ChecklistsForm extends StatefulWidget {
   final dynamic splashData;
   final dynamic refNumber;
 
-  const StepperHome({super.key, this.splashData, this.refNumber});
+  const ChecklistsForm({super.key, this.splashData, this.refNumber});
   @override
-  State<StepperHome> createState() => _StepperHomeState();
+  State<ChecklistsForm> createState() => _ChecklistsFormState();
 }
 
-class _StepperHomeState extends State<StepperHome> {
+class _ChecklistsFormState extends State<ChecklistsForm> {
   final TextEditingController totalLocalEmployees = TextEditingController();
   final TextEditingController totalMaleLocalEmployees = TextEditingController();
   final TextEditingController totalFemaleLocalEmployees = TextEditingController();
@@ -327,7 +327,7 @@ class _StepperHomeState extends State<StepperHome> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: SizeConfig.widthMultiplier * 35,
+                  width: SizeConfig.widthMultiplier * 38,
                   height: SizeConfig.heightMultiplier * 5.5,
                   decoration: BoxDecoration(
                     color: const Color(0xFF037971),

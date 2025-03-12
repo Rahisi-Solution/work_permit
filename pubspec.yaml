@@ -48,6 +48,7 @@ dependencies:
   flutter_barcode_scanner:
   avoid_keyboard:
   intl:
+  fl_chart:
 
 dev_dependencies:
   flutter_test:

@@ -3,58 +3,68 @@ import 'package:wps_survey/helper/size_config.dart';
 
 import '../../helper/appcolors.dart';
 
-class Step3 extends StatefulWidget {
-  const Step3({super.key});
+class Step6 extends StatefulWidget {
+  const Step6({super.key});
   // Compliance variables
-  static String? complianceAnnualLeave;
-  static String? complianceMaternityLeave;
-  static String? complianceSickLeave;
-  static String? complianceEmergenceLeave;
-  static String? compliancePublicHoliday;
-  static String? complianceOffDays;
-  static String? complianceHealthExam;
+  static String? complianceLocal;
+  static String? complianceForeigner;
+  static String? complianceCollectiveBargaining;
+  static String? complianceSocialSecurity;
+  static String? complianceSchemeOfService;
+  static String? complianceSalaryIncrement;
+  static String? compliancePerformanceAppraisal;
+  static String? complianceSuccessionPlanning;
+  static String? complianceLabourTraining;
 
   // Priority variables
-  static bool priorityAnnualLeave = false;
-  static bool priorityMaternityLeave = false;
-  static bool prioritySickLeave = false;
-  static bool priorityEmergenceLeave = false;
-  static bool priorityPublicHoliday = false;
-  static bool priorityOffDays = false;
-  static bool priorityHealthExam = false;
+  static bool priorityLocal = false;
+  static bool priorityForeigner = false;
+  static bool priorityCollectiveBargaining = false;
+  static bool prioritySocialSecurity = false;
+  static bool prioritySchemeOfService = false;
+  static bool prioritySalaryIncrement = false;
+  static bool priorityPerformanceAppraisal = false;
+  static bool prioritySuccessionPlanning = false;
+  static bool priorityLabourTraining = false;
 
   // Action variables
-  static bool actionAnnualLeave = false;
-  static bool actionMaternityLeave = false;
-  static bool actionSickLeave = false;
-  static bool actionEmergenceLeave = false;
-  static bool actionPublicHoliday = false;
-  static bool actionOffDays = false;
-  static bool actionHealthExam = false;
+  static bool actionLocal = false;
+  static bool actionForeigner = false;
+  static bool actionCollectiveBargaining = false;
+  static bool actionSocialSecurity = false;
+  static bool actionSchemeOfService = false;
+  static bool actionSalaryIncrement = false;
+  static bool actionPerformanceAppraisal = false;
+  static bool actionSuccessionPlanning = false;
+  static bool actionLabourTraining = false;
 
   // Controllers for number worker affected fields
-  static TextEditingController workersAnnualLeave = TextEditingController();
-  static TextEditingController workersMaternityLeave = TextEditingController();
-  static TextEditingController workersSickLeave = TextEditingController();
-  static TextEditingController workersEmergenceLeave = TextEditingController();
-  static TextEditingController workersPublicHoliday = TextEditingController();
-  static TextEditingController workersOffDays = TextEditingController();
-  static TextEditingController workersHealthExam = TextEditingController();
+  static TextEditingController workersLocal = TextEditingController();
+  static TextEditingController workersForeigner = TextEditingController();
+  static TextEditingController workersCollectiveBargaining = TextEditingController();
+  static TextEditingController workersSocialSecurity = TextEditingController();
+  static TextEditingController workersSchemeOfService = TextEditingController();
+  static TextEditingController workersSalaryIncrement = TextEditingController();
+  static TextEditingController workersPerformanceAppraisal = TextEditingController();
+  static TextEditingController workersSuccessionPlanning = TextEditingController();
+  static TextEditingController workersLabourTraining = TextEditingController();
 
   // Controllers for deadlines fields
-  static TextEditingController deadlineAnnualLeave = TextEditingController();
-  static TextEditingController deadlineMaternityLeave = TextEditingController();
-  static TextEditingController deadlineSickLeave = TextEditingController();
-  static TextEditingController deadlineEmergenceLeave = TextEditingController();
-  static TextEditingController deadlinePublicHoliday = TextEditingController();
-  static TextEditingController deadlineOffDays = TextEditingController();
-  static TextEditingController deadlineHealthExam = TextEditingController();
+  static TextEditingController deadlineLocal = TextEditingController();
+  static TextEditingController deadlineForeigner = TextEditingController();
+  static TextEditingController deadlineCollectiveBargaining = TextEditingController();
+  static TextEditingController deadlineSocialSecurity = TextEditingController();
+  static TextEditingController deadlineSchemeOfService = TextEditingController();
+  static TextEditingController deadlineSalaryIncrement = TextEditingController();
+  static TextEditingController deadlinePerformanceAppraisal = TextEditingController();
+  static TextEditingController deadlineSuccessionPlanning = TextEditingController();
+  static TextEditingController deadlineLabourTraining = TextEditingController();
 
   @override
-  State<Step3> createState() => _Step3State();
+  State<Step6> createState() => _Step6State();
 }
 
-class _Step3State extends State<Step3> {
+class _Step6State extends State<Step6> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,72 +83,99 @@ class _Step3State extends State<Step3> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '4) Annual leave',
+                '18) Minimum Wages',
+                style: TextStyle(
+                  fontSize: SizeConfig.textMultiplier * 2,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'a) Local',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                 ),
               ),
-              _annualLeave(),
+              _local(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               const Divider(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               Text(
-                '5) Maternity leave',
+                'b) Foreign',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                 ),
               ),
-              _maternityLeave(),
+              _foreigner(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               const Divider(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               Text(
-                '6) Sick leave',
+                '19) Collective bargaining',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                 ),
               ),
-              _sickLeave(),
+              _collectiveBargaining(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               const Divider(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               Text(
-                '7) Temporary emergence leave',
+                '20) Social security',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                 ),
               ),
-              _emergenceLeave(),
+              _socialSecurity(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               const Divider(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               Text(
-                '8) Public holiday',
+                '21) Scheme of service',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                 ),
               ),
-              _publicHoliday(),
+              _schemeOfService(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               const Divider(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               Text(
-                '9) Off days',
+                '22) Salary increment',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                 ),
               ),
-              _offDays(),
+              _salaryIncrement(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               const Divider(),
               SizedBox(height: SizeConfig.heightMultiplier * 2),
               Text(
-                '10) Health examination',
+                '23) Performance appraisal',
                 style: TextStyle(
                   fontSize: SizeConfig.textMultiplier * 2,
                 ),
               ),
-              _healthExam(),
+              _performanceAppraisal(),
+              SizedBox(height: SizeConfig.heightMultiplier * 2),
+              const Divider(),
+              SizedBox(height: SizeConfig.heightMultiplier * 2),
+              Text(
+                '24) Succession planning',
+                style: TextStyle(
+                  fontSize: SizeConfig.textMultiplier * 2,
+                ),
+              ),
+              _successionPlanning(),
+              SizedBox(height: SizeConfig.heightMultiplier * 2),
+              const Divider(),
+              SizedBox(height: SizeConfig.heightMultiplier * 2),
+              Text(
+                '25) Labour training',
+                style: TextStyle(
+                  fontSize: SizeConfig.textMultiplier * 2,
+                ),
+              ),
+              _labourTraining(),
             ],
           ),
         ),
@@ -146,7 +183,7 @@ class _Step3State extends State<Step3> {
     );
   }
 
-  _annualLeave() {
+  _local() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -182,10 +219,10 @@ class _Step3State extends State<Step3> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step3.complianceAnnualLeave,
+                            groupValue: Step6.complianceLocal,
                             onChanged: (value) {
                               setState(() {
-                                Step3.complianceAnnualLeave = value;
+                                Step6.complianceLocal = value;
                               });
                             },
                           ),
@@ -210,10 +247,10 @@ class _Step3State extends State<Step3> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step3.complianceAnnualLeave,
+                          groupValue: Step6.complianceLocal,
                           onChanged: (value) {
                             setState(() {
-                              Step3.complianceAnnualLeave = value;
+                              Step6.complianceLocal = value;
                             });
                           },
                         ),
@@ -224,7 +261,7 @@ class _Step3State extends State<Step3> {
               ],
             ),
             CheckboxListTile(
-              value: Step3.priorityAnnualLeave,
+              value: Step6.priorityLocal,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -236,12 +273,12 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.priorityAnnualLeave = value ?? false;
+                  Step6.priorityLocal = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step3.actionAnnualLeave,
+              value: Step6.actionLocal,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -253,7 +290,7 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.actionAnnualLeave = value ?? false;
+                  Step6.actionLocal = value ?? false;
                 });
               },
             ),
@@ -263,7 +300,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.workersAnnualLeave,
+                controller: Step6.workersLocal,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -293,7 +330,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.deadlineAnnualLeave,
+                controller: Step6.deadlineLocal,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -322,7 +359,7 @@ class _Step3State extends State<Step3> {
     );
   }
 
-  _maternityLeave() {
+  _foreigner() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -358,10 +395,10 @@ class _Step3State extends State<Step3> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step3.complianceMaternityLeave,
+                            groupValue: Step6.complianceForeigner,
                             onChanged: (value) {
                               setState(() {
-                                Step3.complianceMaternityLeave = value;
+                                Step6.complianceForeigner = value;
                               });
                             },
                           ),
@@ -386,10 +423,10 @@ class _Step3State extends State<Step3> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step3.complianceMaternityLeave,
+                          groupValue: Step6.complianceForeigner,
                           onChanged: (value) {
                             setState(() {
-                              Step3.complianceMaternityLeave = value;
+                              Step6.complianceForeigner = value;
                             });
                           },
                         ),
@@ -400,7 +437,7 @@ class _Step3State extends State<Step3> {
               ],
             ),
             CheckboxListTile(
-              value: Step3.priorityMaternityLeave,
+              value: Step6.priorityForeigner,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -412,12 +449,12 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.priorityMaternityLeave = value ?? false;
+                  Step6.priorityForeigner = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step3.actionMaternityLeave,
+              value: Step6.actionForeigner,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -429,7 +466,7 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.actionMaternityLeave = value ?? false;
+                  Step6.actionForeigner = value ?? false;
                 });
               },
             ),
@@ -439,7 +476,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.workersMaternityLeave,
+                controller: Step6.workersForeigner,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -469,7 +506,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.deadlineMaternityLeave,
+                controller: Step6.deadlineForeigner,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -498,7 +535,7 @@ class _Step3State extends State<Step3> {
     );
   }
 
-  _sickLeave() {
+  _collectiveBargaining() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -534,10 +571,10 @@ class _Step3State extends State<Step3> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step3.complianceSickLeave,
+                            groupValue: Step6.complianceCollectiveBargaining,
                             onChanged: (value) {
                               setState(() {
-                                Step3.complianceSickLeave = value;
+                                Step6.complianceCollectiveBargaining = value;
                               });
                             },
                           ),
@@ -562,10 +599,10 @@ class _Step3State extends State<Step3> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step3.complianceSickLeave,
+                          groupValue: Step6.complianceCollectiveBargaining,
                           onChanged: (value) {
                             setState(() {
-                              Step3.complianceSickLeave = value;
+                              Step6.complianceCollectiveBargaining = value;
                             });
                           },
                         ),
@@ -576,7 +613,7 @@ class _Step3State extends State<Step3> {
               ],
             ),
             CheckboxListTile(
-              value: Step3.prioritySickLeave,
+              value: Step6.priorityCollectiveBargaining,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -588,12 +625,12 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.prioritySickLeave = value ?? false;
+                  Step6.priorityCollectiveBargaining = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step3.actionSickLeave,
+              value: Step6.actionCollectiveBargaining,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -605,7 +642,7 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.actionSickLeave = value ?? false;
+                  Step6.actionCollectiveBargaining = value ?? false;
                 });
               },
             ),
@@ -615,7 +652,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.workersSickLeave,
+                controller: Step6.workersCollectiveBargaining,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -645,7 +682,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.deadlineSickLeave,
+                controller: Step6.deadlineCollectiveBargaining,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -674,7 +711,7 @@ class _Step3State extends State<Step3> {
     );
   }
 
-  _emergenceLeave() {
+  _socialSecurity() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -710,10 +747,10 @@ class _Step3State extends State<Step3> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step3.complianceEmergenceLeave,
+                            groupValue: Step6.complianceSocialSecurity,
                             onChanged: (value) {
                               setState(() {
-                                Step3.complianceEmergenceLeave = value;
+                                Step6.complianceSocialSecurity = value;
                               });
                             },
                           ),
@@ -738,10 +775,10 @@ class _Step3State extends State<Step3> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step3.complianceEmergenceLeave,
+                          groupValue: Step6.complianceSocialSecurity,
                           onChanged: (value) {
                             setState(() {
-                              Step3.complianceEmergenceLeave = value;
+                              Step6.complianceSocialSecurity = value;
                             });
                           },
                         ),
@@ -752,7 +789,7 @@ class _Step3State extends State<Step3> {
               ],
             ),
             CheckboxListTile(
-              value: Step3.priorityEmergenceLeave,
+              value: Step6.prioritySocialSecurity,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -764,12 +801,12 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.priorityEmergenceLeave = value ?? false;
+                  Step6.prioritySocialSecurity = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step3.actionEmergenceLeave,
+              value: Step6.actionSocialSecurity,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -781,7 +818,7 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.actionEmergenceLeave = value ?? false;
+                  Step6.actionSocialSecurity = value ?? false;
                 });
               },
             ),
@@ -791,7 +828,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.workersEmergenceLeave,
+                controller: Step6.workersSocialSecurity,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -821,7 +858,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.deadlineEmergenceLeave,
+                controller: Step6.deadlineSocialSecurity,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -850,7 +887,7 @@ class _Step3State extends State<Step3> {
     );
   }
 
-  _publicHoliday() {
+  _schemeOfService() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -886,10 +923,10 @@ class _Step3State extends State<Step3> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step3.compliancePublicHoliday,
+                            groupValue: Step6.complianceSchemeOfService,
                             onChanged: (value) {
                               setState(() {
-                                Step3.compliancePublicHoliday = value;
+                                Step6.complianceSchemeOfService = value;
                               });
                             },
                           ),
@@ -914,10 +951,10 @@ class _Step3State extends State<Step3> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step3.compliancePublicHoliday,
+                          groupValue: Step6.complianceSchemeOfService,
                           onChanged: (value) {
                             setState(() {
-                              Step3.compliancePublicHoliday = value;
+                              Step6.complianceSchemeOfService = value;
                             });
                           },
                         ),
@@ -928,7 +965,7 @@ class _Step3State extends State<Step3> {
               ],
             ),
             CheckboxListTile(
-              value: Step3.priorityPublicHoliday,
+              value: Step6.prioritySchemeOfService,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -940,12 +977,12 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.priorityPublicHoliday = value ?? false;
+                  Step6.prioritySchemeOfService = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step3.actionPublicHoliday,
+              value: Step6.actionSchemeOfService,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -957,7 +994,7 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.actionPublicHoliday = value ?? false;
+                  Step6.actionSchemeOfService = value ?? false;
                 });
               },
             ),
@@ -967,7 +1004,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.workersPublicHoliday,
+                controller: Step6.workersSchemeOfService,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -997,7 +1034,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.deadlinePublicHoliday,
+                controller: Step6.deadlineSchemeOfService,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -1026,7 +1063,7 @@ class _Step3State extends State<Step3> {
     );
   }
 
-  _offDays() {
+  _salaryIncrement() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -1062,10 +1099,10 @@ class _Step3State extends State<Step3> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step3.complianceOffDays,
+                            groupValue: Step6.complianceSalaryIncrement,
                             onChanged: (value) {
                               setState(() {
-                                Step3.complianceOffDays = value;
+                                Step6.complianceSalaryIncrement = value;
                               });
                             },
                           ),
@@ -1090,10 +1127,10 @@ class _Step3State extends State<Step3> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step3.complianceOffDays,
+                          groupValue: Step6.complianceSalaryIncrement,
                           onChanged: (value) {
                             setState(() {
-                              Step3.complianceOffDays = value;
+                              Step6.complianceSalaryIncrement = value;
                             });
                           },
                         ),
@@ -1104,7 +1141,7 @@ class _Step3State extends State<Step3> {
               ],
             ),
             CheckboxListTile(
-              value: Step3.priorityOffDays,
+              value: Step6.prioritySalaryIncrement,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -1116,12 +1153,12 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.priorityOffDays = value ?? false;
+                  Step6.prioritySalaryIncrement = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step3.actionOffDays,
+              value: Step6.actionSalaryIncrement,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -1133,7 +1170,7 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.actionOffDays = value ?? false;
+                  Step6.actionSalaryIncrement = value ?? false;
                 });
               },
             ),
@@ -1143,7 +1180,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.workersOffDays,
+                controller: Step6.workersSalaryIncrement,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -1173,7 +1210,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.deadlineOffDays,
+                controller: Step6.deadlineSalaryIncrement,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -1202,7 +1239,7 @@ class _Step3State extends State<Step3> {
     );
   }
 
-  _healthExam() {
+  _performanceAppraisal() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -1238,10 +1275,10 @@ class _Step3State extends State<Step3> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step3.complianceHealthExam,
+                            groupValue: Step6.compliancePerformanceAppraisal,
                             onChanged: (value) {
                               setState(() {
-                                Step3.complianceHealthExam = value;
+                                Step6.compliancePerformanceAppraisal = value;
                               });
                             },
                           ),
@@ -1266,10 +1303,10 @@ class _Step3State extends State<Step3> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step3.complianceHealthExam,
+                          groupValue: Step6.compliancePerformanceAppraisal,
                           onChanged: (value) {
                             setState(() {
-                              Step3.complianceHealthExam = value;
+                              Step6.compliancePerformanceAppraisal = value;
                             });
                           },
                         ),
@@ -1280,7 +1317,7 @@ class _Step3State extends State<Step3> {
               ],
             ),
             CheckboxListTile(
-              value: Step3.priorityHealthExam,
+              value: Step6.priorityPerformanceAppraisal,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -1292,12 +1329,12 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.priorityHealthExam = value ?? false;
+                  Step6.priorityPerformanceAppraisal = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step3.actionHealthExam,
+              value: Step6.actionPerformanceAppraisal,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -1309,7 +1346,7 @@ class _Step3State extends State<Step3> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step3.actionHealthExam = value ?? false;
+                  Step6.actionPerformanceAppraisal = value ?? false;
                 });
               },
             ),
@@ -1319,7 +1356,7 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.workersHealthExam,
+                controller: Step6.workersPerformanceAppraisal,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -1349,7 +1386,359 @@ class _Step3State extends State<Step3> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step3.deadlineHealthExam,
+                controller: Step6.deadlinePerformanceAppraisal,
+                cursorColor: AppColors.primaryColor,
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  hintText: 'Deadline of correction',
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(
+                    color: AppColors.primaryColor.withOpacity(0.5),
+                    fontSize: SizeConfig.textMultiplier * 1.8,
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.date_range,
+                    color: Color(0xFF808080),
+                  ),
+                ),
+                style: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontSize: SizeConfig.textMultiplier * 1.8,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _successionPlanning() {
+    return Container(
+      decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
+      child: Padding(
+        padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Compliance',
+                  style: TextStyle(
+                    fontSize: SizeConfig.textMultiplier * 2,
+                  ),
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: SizeConfig.widthMultiplier * 20,
+                      child: Center(
+                        child: ListTile(
+                          title: Text(
+                            'Yes',
+                            style: TextStyle(
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          horizontalTitleGap: SizeConfig.widthMultiplier * 0.01,
+                          minLeadingWidth: SizeConfig.widthMultiplier * 0.01,
+                          minTileHeight: SizeConfig.heightMultiplier * 0.01,
+                          minVerticalPadding: SizeConfig.heightMultiplier * 0.01,
+                          contentPadding: EdgeInsets.zero,
+                          leading: Radio<String>(
+                            value: 'Yes',
+                            groupValue: Step6.complianceSuccessionPlanning,
+                            onChanged: (value) {
+                              setState(() {
+                                Step6.complianceSuccessionPlanning = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: SizeConfig.widthMultiplier * 10),
+                    SizedBox(
+                      width: SizeConfig.widthMultiplier * 20,
+                      child: ListTile(
+                        title: Text(
+                          'No',
+                          style: TextStyle(
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        horizontalTitleGap: SizeConfig.widthMultiplier * 0.01,
+                        minLeadingWidth: SizeConfig.widthMultiplier * 0.01,
+                        minTileHeight: SizeConfig.heightMultiplier * 0.01,
+                        minVerticalPadding: SizeConfig.heightMultiplier * 0.01,
+                        contentPadding: EdgeInsets.zero,
+                        leading: Radio<String>(
+                          value: 'No',
+                          groupValue: Step6.complianceSuccessionPlanning,
+                          onChanged: (value) {
+                            setState(() {
+                              Step6.complianceSuccessionPlanning = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            CheckboxListTile(
+              value: Step6.prioritySuccessionPlanning,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              title: Text(
+                'Priority',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: SizeConfig.textMultiplier * 2,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  Step6.prioritySuccessionPlanning = value ?? false;
+                });
+              },
+            ),
+            CheckboxListTile(
+              value: Step6.actionSuccessionPlanning,
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                'Action if no compliance',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: SizeConfig.textMultiplier * 2,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  Step6.actionSuccessionPlanning = value ?? false;
+                });
+              },
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: TextFormField(
+                controller: Step6.workersSuccessionPlanning,
+                cursorColor: AppColors.primaryColor,
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  hintText: 'No. of workers affected',
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(
+                    color: AppColors.primaryColor.withOpacity(0.5),
+                    fontSize: SizeConfig.textMultiplier * 1.8,
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.work_outline_sharp,
+                    color: Color(0xFF808080),
+                  ),
+                ),
+                style: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontSize: SizeConfig.textMultiplier * 1.8,
+                ),
+              ),
+            ),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: TextFormField(
+                controller: Step6.deadlineSuccessionPlanning,
+                cursorColor: AppColors.primaryColor,
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  hintText: 'Deadline of correction',
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(
+                    color: AppColors.primaryColor.withOpacity(0.5),
+                    fontSize: SizeConfig.textMultiplier * 1.8,
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.date_range,
+                    color: Color(0xFF808080),
+                  ),
+                ),
+                style: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontSize: SizeConfig.textMultiplier * 1.8,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _labourTraining() {
+    return Container(
+      decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
+      child: Padding(
+        padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Compliance',
+                  style: TextStyle(
+                    fontSize: SizeConfig.textMultiplier * 2,
+                  ),
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: SizeConfig.widthMultiplier * 20,
+                      child: Center(
+                        child: ListTile(
+                          title: Text(
+                            'Yes',
+                            style: TextStyle(
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          horizontalTitleGap: SizeConfig.widthMultiplier * 0.01,
+                          minLeadingWidth: SizeConfig.widthMultiplier * 0.01,
+                          minTileHeight: SizeConfig.heightMultiplier * 0.01,
+                          minVerticalPadding: SizeConfig.heightMultiplier * 0.01,
+                          contentPadding: EdgeInsets.zero,
+                          leading: Radio<String>(
+                            value: 'Yes',
+                            groupValue: Step6.complianceLabourTraining,
+                            onChanged: (value) {
+                              setState(() {
+                                Step6.complianceLabourTraining = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: SizeConfig.widthMultiplier * 10),
+                    SizedBox(
+                      width: SizeConfig.widthMultiplier * 20,
+                      child: ListTile(
+                        title: Text(
+                          'No',
+                          style: TextStyle(
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        horizontalTitleGap: SizeConfig.widthMultiplier * 0.01,
+                        minLeadingWidth: SizeConfig.widthMultiplier * 0.01,
+                        minTileHeight: SizeConfig.heightMultiplier * 0.01,
+                        minVerticalPadding: SizeConfig.heightMultiplier * 0.01,
+                        contentPadding: EdgeInsets.zero,
+                        leading: Radio<String>(
+                          value: 'No',
+                          groupValue: Step6.complianceLabourTraining,
+                          onChanged: (value) {
+                            setState(() {
+                              Step6.complianceLabourTraining = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            CheckboxListTile(
+              value: Step6.priorityLabourTraining,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              title: Text(
+                'Priority',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: SizeConfig.textMultiplier * 2,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  Step6.priorityLabourTraining = value ?? false;
+                });
+              },
+            ),
+            CheckboxListTile(
+              value: Step6.actionLabourTraining,
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                'Action if no compliance',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: SizeConfig.textMultiplier * 2,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  Step6.actionLabourTraining = value ?? false;
+                });
+              },
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: TextFormField(
+                controller: Step6.workersLabourTraining,
+                cursorColor: AppColors.primaryColor,
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  hintText: 'No. of workers affected',
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(
+                    color: AppColors.primaryColor.withOpacity(0.5),
+                    fontSize: SizeConfig.textMultiplier * 1.8,
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.work_outline_sharp,
+                    color: Color(0xFF808080),
+                  ),
+                ),
+                style: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontSize: SizeConfig.textMultiplier * 1.8,
+                ),
+              ),
+            ),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: TextFormField(
+                controller: Step6.deadlineLabourTraining,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,

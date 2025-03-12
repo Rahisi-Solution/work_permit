@@ -2,22 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:wps_survey/helper/size_config.dart';
-import 'package:wps_survey/survey_checkllist/local_inspections/step1.dart';
-import 'package:wps_survey/survey_checkllist/local_inspections/step2.dart';
-import 'package:wps_survey/survey_checkllist/local_inspections/step3.dart';
-import 'package:wps_survey/survey_checkllist/local_inspections/step4.dart';
+import 'package:wps_survey/inspections/step1.dart';
+import 'package:wps_survey/inspections/step2.dart';
+import 'package:wps_survey/inspections/step3.dart';
+import 'package:wps_survey/inspections/step4.dart';
+import 'package:wps_survey/inspections/step5.dart';
+import 'package:wps_survey/inspections/step6.dart';
+import 'package:wps_survey/inspections/step7.dart';
 import 'package:wps_survey/utils/config.dart';
 
-import '../../helper/appcolors.dart';
+import '../helper/appcolors.dart';
 
-class LocalEmployeeStepperHome extends StatefulWidget {
-  const LocalEmployeeStepperHome({super.key});
+class InspectionForm extends StatefulWidget {
+  const InspectionForm({super.key});
 
   @override
-  State<LocalEmployeeStepperHome> createState() => _LocalEmployeeStepperHomeState();
+  State<InspectionForm> createState() => _InspectionFormState();
 }
 
-class _LocalEmployeeStepperHomeState extends State<LocalEmployeeStepperHome> {
+class _InspectionFormState extends State<InspectionForm> {
   int activeStep = 0;
   final int totalSteps = 7;
 
@@ -171,6 +174,12 @@ class _LocalEmployeeStepperHomeState extends State<LocalEmployeeStepperHome> {
         return const Step3();
       case 3:
         return const Step4();
+      case 4:
+        return const Step5();
+      case 5:
+        return const Step6();
+      case 6:
+        return const Step7();
       default:
         return const Center(
           child: Text(

@@ -37,7 +37,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
                   ),
                 ),
                 Text(
-                  "Survey Saved Successfully",
+                  "Inspection Saved Successfully",
                   style: TextStyle(
                     fontSize: SizeConfig.textMultiplier * 2.5,
                     color: AppColors.primaryColor,

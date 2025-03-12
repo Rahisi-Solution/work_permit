@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wps_survey/survey_checkllist/stepper_home.dart';
 
 import '../helper/appcolors.dart';
 import '../helper/size_config.dart';
 import '../provider/theme_provider.dart';
+import '../survey_checkllist/checklists_form.dart';
 
 class SurveyDetails extends StatefulWidget {
   final dynamic splashData;
@@ -92,7 +92,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                   "Institution",
                   style: TextStyle(
                     fontSize: SizeConfig.textMultiplier * 2,
-                    color: Color(0xFFbc6c25),
+                    color: const Color(0xFFbc6c25),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -109,7 +109,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                   "Location",
                   style: TextStyle(
                     fontSize: SizeConfig.textMultiplier * 2,
-                    color: Color(0xFF540b0e),
+                    color: const Color(0xFF540b0e),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -126,7 +126,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                   "Status",
                   style: TextStyle(
                     fontSize: SizeConfig.textMultiplier * 2,
-                    color: Color(0xFF588157),
+                    color: const Color(0xFF588157),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -146,7 +146,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                       "Created date",
                       style: TextStyle(
                         fontSize: SizeConfig.textMultiplier * 2,
-                        color: Color(0xFF38a3a5),
+                        color: const Color(0xFF38a3a5),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -173,7 +173,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => StepperHome(
+                            builder: (_) => ChecklistsForm(
                               splashData: widget.splashData,
                               refNumber: widget.data["reference_number"],
                             ),
@@ -188,7 +188,7 @@ class _SurveyDetailsState extends State<SurveyDetails> {
                         ),
                         child: Center(
                           child: Text(
-                            "Start survey",
+                            "Start inspection",
                             style: TextStyle(
                               fontSize: SizeConfig.textMultiplier * 2,
                               color: Colors.white,

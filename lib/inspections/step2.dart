@@ -1,60 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:wps_survey/helper/size_config.dart';
 
-import '../../helper/appcolors.dart';
+import '../helper/appcolors.dart';
 
-class Step4 extends StatefulWidget {
-  const Step4({super.key});
+class Step2 extends StatefulWidget {
   // Compliance variables
-  static String? complianceMedical;
-  static String? complianceVentilation;
-  static String? complianceLighting;
-  static String? complianceNoising;
-  static String? complianceFire;
-  static String? complianceFirstAid;
-  static String? complianceProtectiveEquipments;
+  static String? compliancePermanent;
+  static String? complianceFixed;
+  static String? compliancePartTime;
+  static String? complianceDailyPaid;
+  static String? complianceOralContract;
+  static String? complianceWorkingHours;
+  static String? complianceOverTime;
 
   // Priority variables
-  static bool priorityMedical = false;
-  static bool priorityVentilation = false;
-  static bool priorityLighting = false;
-  static bool priorityNoising = false;
-  static bool priorityFire = false;
-  static bool priorityFirstAid = false;
-  static bool priorityProtectiveEquipments = false;
+  static bool priorityPermanent = false;
+  static bool priorityFixed = false;
+  static bool priorityPartTime = false;
+  static bool priorityDailyPaid = false;
+  static bool priorityOralContract = false;
+  static bool priorityWorkingHours = false;
+  static bool priorityOverTime = false;
 
   // Action variables
-  static bool actionMedical = false;
-  static bool actionVentilation = false;
-  static bool actionLighting = false;
-  static bool actionNoising = false;
-  static bool actionFire = false;
-  static bool actionFirstAid = false;
-  static bool actionProtectiveEquipments = false;
+  static bool actionPermanent = false;
+  static bool actionFixed = false;
+  static bool actionPartTime = false;
+  static bool actionDailyPaid = false;
+  static bool actionOralContract = false;
+  static bool actionWorkingHours = false;
+  static bool actionOverTime = false;
 
   // Controllers for number worker affected fields
-  static TextEditingController workersMedical = TextEditingController();
-  static TextEditingController workersVentilation = TextEditingController();
-  static TextEditingController workersLighting = TextEditingController();
-  static TextEditingController workersNoising = TextEditingController();
-  static TextEditingController workersFire = TextEditingController();
-  static TextEditingController workersFirstAid = TextEditingController();
-  static TextEditingController workersProtectiveEquipments = TextEditingController();
+  static TextEditingController workersPermanent = TextEditingController();
+  static TextEditingController workersFixed = TextEditingController();
+  static TextEditingController workersPartTime = TextEditingController();
+  static TextEditingController workersDailyPaid = TextEditingController();
+  static TextEditingController workersOralContract = TextEditingController();
+  static TextEditingController workersWorkingHours = TextEditingController();
+  static TextEditingController workersOverTime = TextEditingController();
 
   // Controllers for deadlines fields
-  static TextEditingController deadlineMedical = TextEditingController();
-  static TextEditingController deadlineVentilation = TextEditingController();
-  static TextEditingController deadlineLighting = TextEditingController();
-  static TextEditingController deadlineNoising = TextEditingController();
-  static TextEditingController deadlineFire = TextEditingController();
-  static TextEditingController deadlineFirstAid = TextEditingController();
-  static TextEditingController deadlineProtectiveEquipments = TextEditingController();
-
+  static TextEditingController deadlinePermanent = TextEditingController();
+  static TextEditingController deadlineFixed = TextEditingController();
+  static TextEditingController deadlinePartTime = TextEditingController();
+  static TextEditingController deadlineDailyPaid = TextEditingController();
+  static TextEditingController deadlineOralContract = TextEditingController();
+  static TextEditingController deadlineWorkingHours = TextEditingController();
+  static TextEditingController deadlineOverTime = TextEditingController();
   @override
-  State<Step4> createState() => _Step4State();
+  _Step2State createState() => _Step2State();
 }
 
-class _Step4State extends State<Step4> {
+class _Step2State extends State<Step2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,94 +64,115 @@ class _Step4State extends State<Step4> {
     return SizedBox(
       width: SizeConfig.widthMultiplier * 100,
       height: SizeConfig.heightMultiplier * 100,
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '11) Medical treatments',
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'EMPLOYMENT STANDARD/FUNDAMENTAL RIGHT AND PROTECTIONS',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.bold,
               ),
-              _medical(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              const Divider(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              Text(
-                '12) Safety and health',
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.bold,
-                ),
+            ),
+            Text(
+              '1. Contract of Services',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.bold,
               ),
-              Text(
-                'a) Ventilation',
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                ),
+            ),
+            Text(
+              'a) Permanent',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
               ),
-              _ventilation(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              const Divider(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              Text(
-                'b) Lighting',
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                ),
+            ),
+            _permanent(),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            const Divider(),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            Text(
+              'b) Fixed',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
               ),
-              _lighting(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              const Divider(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              Text(
-                'c) Noising',
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                ),
+            ),
+            _fixed(),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            const Divider(),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            Text(
+              'c) Part time',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
               ),
-              _noising(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              const Divider(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              Text(
-                'd) Fire extinguishers',
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                ),
+            ),
+            _partTime(),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            const Divider(),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            Text(
+              'd) Daily Paid',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
               ),
-              _fire(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              const Divider(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              Text(
-                'e) First aid kit',
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                ),
+            ),
+            _dailyPaid(),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            const Divider(),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            Text(
+              'e) Oral contract',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
               ),
-              _firstAid(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              const Divider(),
-              SizedBox(height: SizeConfig.heightMultiplier * 2),
-              Text(
-                'f) Personal protective equipments',
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                ),
+            ),
+            _oralContract(),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            const Divider(),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            Text(
+              '02) Working hours',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
               ),
-              _protectiveEquipments(),
-            ],
-          ),
+            ),
+            _workingHours(),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            const Divider(),
+            SizedBox(height: SizeConfig.heightMultiplier * 2),
+            Text(
+              '03) Over time',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            _overTime(),
+          ],
         ),
       ),
     );
   }
 
-  _medical() {
+  _permanent() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -189,10 +208,10 @@ class _Step4State extends State<Step4> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step4.complianceMedical,
+                            groupValue: Step2.compliancePermanent,
                             onChanged: (value) {
                               setState(() {
-                                Step4.complianceMedical = value;
+                                Step2.compliancePermanent = value;
                               });
                             },
                           ),
@@ -217,10 +236,10 @@ class _Step4State extends State<Step4> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step4.complianceMedical,
+                          groupValue: Step2.compliancePermanent,
                           onChanged: (value) {
                             setState(() {
-                              Step4.complianceMedical = value;
+                              Step2.compliancePermanent = value;
                             });
                           },
                         ),
@@ -231,7 +250,7 @@ class _Step4State extends State<Step4> {
               ],
             ),
             CheckboxListTile(
-              value: Step4.priorityMedical,
+              value: Step2.priorityPermanent,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -243,12 +262,12 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.priorityMedical = value ?? false;
+                  Step2.priorityPermanent = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step4.actionMedical,
+              value: Step2.actionPermanent,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -260,7 +279,7 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.actionMedical = value ?? false;
+                  Step2.actionPermanent = value ?? false;
                 });
               },
             ),
@@ -270,7 +289,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.workersMedical,
+                controller: Step2.workersPermanent,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -300,7 +319,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.deadlineMedical,
+                controller: Step2.deadlinePermanent,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -329,7 +348,7 @@ class _Step4State extends State<Step4> {
     );
   }
 
-  _ventilation() {
+  _fixed() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -365,10 +384,10 @@ class _Step4State extends State<Step4> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step4.complianceVentilation,
+                            groupValue: Step2.complianceFixed,
                             onChanged: (value) {
                               setState(() {
-                                Step4.complianceVentilation = value;
+                                Step2.complianceFixed = value;
                               });
                             },
                           ),
@@ -393,10 +412,10 @@ class _Step4State extends State<Step4> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step4.complianceVentilation,
+                          groupValue: Step2.complianceFixed,
                           onChanged: (value) {
                             setState(() {
-                              Step4.complianceVentilation = value;
+                              Step2.complianceFixed = value;
                             });
                           },
                         ),
@@ -407,7 +426,7 @@ class _Step4State extends State<Step4> {
               ],
             ),
             CheckboxListTile(
-              value: Step4.priorityVentilation,
+              value: Step2.priorityFixed,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -419,12 +438,12 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.priorityVentilation = value ?? false;
+                  Step2.priorityFixed = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step4.actionVentilation,
+              value: Step2.actionFixed,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -436,7 +455,7 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.actionVentilation = value ?? false;
+                  Step2.actionFixed = value ?? false;
                 });
               },
             ),
@@ -446,7 +465,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.workersVentilation,
+                controller: Step2.workersFixed,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -476,7 +495,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.deadlineVentilation,
+                controller: Step2.deadlineFixed,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -505,7 +524,7 @@ class _Step4State extends State<Step4> {
     );
   }
 
-  _lighting() {
+  _partTime() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -541,10 +560,10 @@ class _Step4State extends State<Step4> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step4.complianceLighting,
+                            groupValue: Step2.compliancePartTime,
                             onChanged: (value) {
                               setState(() {
-                                Step4.complianceLighting = value;
+                                Step2.compliancePartTime = value;
                               });
                             },
                           ),
@@ -569,10 +588,10 @@ class _Step4State extends State<Step4> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step4.complianceLighting,
+                          groupValue: Step2.compliancePartTime,
                           onChanged: (value) {
                             setState(() {
-                              Step4.complianceLighting = value;
+                              Step2.compliancePartTime = value;
                             });
                           },
                         ),
@@ -583,7 +602,7 @@ class _Step4State extends State<Step4> {
               ],
             ),
             CheckboxListTile(
-              value: Step4.priorityLighting,
+              value: Step2.priorityFixed,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -595,12 +614,12 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.priorityLighting = value ?? false;
+                  Step2.priorityFixed = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step4.actionLighting,
+              value: Step2.actionFixed,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -612,7 +631,7 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.actionLighting = value ?? false;
+                  Step2.actionFixed = value ?? false;
                 });
               },
             ),
@@ -622,7 +641,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.workersLighting,
+                controller: Step2.workersPartTime,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -652,7 +671,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.deadlineLighting,
+                controller: Step2.deadlinePartTime,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -681,7 +700,7 @@ class _Step4State extends State<Step4> {
     );
   }
 
-  _noising() {
+  _dailyPaid() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -717,10 +736,10 @@ class _Step4State extends State<Step4> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step4.complianceNoising,
+                            groupValue: Step2.complianceDailyPaid,
                             onChanged: (value) {
                               setState(() {
-                                Step4.complianceNoising = value;
+                                Step2.complianceDailyPaid = value;
                               });
                             },
                           ),
@@ -745,10 +764,10 @@ class _Step4State extends State<Step4> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step4.complianceNoising,
+                          groupValue: Step2.complianceDailyPaid,
                           onChanged: (value) {
                             setState(() {
-                              Step4.complianceNoising = value;
+                              Step2.complianceDailyPaid = value;
                             });
                           },
                         ),
@@ -759,7 +778,7 @@ class _Step4State extends State<Step4> {
               ],
             ),
             CheckboxListTile(
-              value: Step4.priorityNoising,
+              value: Step2.priorityDailyPaid,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -771,12 +790,12 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.priorityNoising = value ?? false;
+                  Step2.priorityDailyPaid = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step4.actionNoising,
+              value: Step2.actionDailyPaid,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -788,7 +807,7 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.actionNoising = value ?? false;
+                  Step2.actionDailyPaid = value ?? false;
                 });
               },
             ),
@@ -798,7 +817,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.workersNoising,
+                controller: Step2.workersDailyPaid,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -828,7 +847,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.deadlineNoising,
+                controller: Step2.deadlineDailyPaid,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -857,7 +876,7 @@ class _Step4State extends State<Step4> {
     );
   }
 
-  _fire() {
+  _oralContract() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -893,10 +912,10 @@ class _Step4State extends State<Step4> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step4.complianceFire,
+                            groupValue: Step2.complianceOralContract,
                             onChanged: (value) {
                               setState(() {
-                                Step4.complianceFire = value;
+                                Step2.complianceOralContract = value;
                               });
                             },
                           ),
@@ -921,10 +940,10 @@ class _Step4State extends State<Step4> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step4.complianceFire,
+                          groupValue: Step2.complianceOralContract,
                           onChanged: (value) {
                             setState(() {
-                              Step4.complianceFire = value;
+                              Step2.complianceOralContract = value;
                             });
                           },
                         ),
@@ -935,7 +954,7 @@ class _Step4State extends State<Step4> {
               ],
             ),
             CheckboxListTile(
-              value: Step4.priorityFire,
+              value: Step2.priorityOralContract,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -947,12 +966,12 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.priorityFire = value ?? false;
+                  Step2.priorityOralContract = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step4.actionFire,
+              value: Step2.actionOralContract,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -964,7 +983,7 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.actionFire = value ?? false;
+                  Step2.actionOralContract = value ?? false;
                 });
               },
             ),
@@ -974,7 +993,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.workersFire,
+                controller: Step2.workersOralContract,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -1004,7 +1023,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.deadlineFire,
+                controller: Step2.deadlineOralContract,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -1033,7 +1052,7 @@ class _Step4State extends State<Step4> {
     );
   }
 
-  _firstAid() {
+  _workingHours() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -1069,10 +1088,10 @@ class _Step4State extends State<Step4> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step4.complianceFirstAid,
+                            groupValue: Step2.complianceWorkingHours,
                             onChanged: (value) {
                               setState(() {
-                                Step4.complianceFirstAid = value;
+                                Step2.complianceWorkingHours = value;
                               });
                             },
                           ),
@@ -1097,10 +1116,10 @@ class _Step4State extends State<Step4> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step4.complianceFirstAid,
+                          groupValue: Step2.complianceWorkingHours,
                           onChanged: (value) {
                             setState(() {
-                              Step4.complianceFirstAid = value;
+                              Step2.complianceWorkingHours = value;
                             });
                           },
                         ),
@@ -1111,7 +1130,7 @@ class _Step4State extends State<Step4> {
               ],
             ),
             CheckboxListTile(
-              value: Step4.priorityFirstAid,
+              value: Step2.priorityWorkingHours,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -1123,12 +1142,12 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.priorityFirstAid = value ?? false;
+                  Step2.priorityWorkingHours = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step4.actionFirstAid,
+              value: Step2.actionWorkingHours,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -1140,7 +1159,7 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.actionFirstAid = value ?? false;
+                  Step2.actionWorkingHours = value ?? false;
                 });
               },
             ),
@@ -1150,7 +1169,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.workersFirstAid,
+                controller: Step2.workersWorkingHours,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -1180,7 +1199,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.deadlineFirstAid,
+                controller: Step2.deadlineWorkingHours,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -1209,7 +1228,7 @@ class _Step4State extends State<Step4> {
     );
   }
 
-  _protectiveEquipments() {
+  _overTime() {
     return Container(
       decoration: BoxDecoration(color: AppColors.primaryColor.withOpacity(0.2)),
       child: Padding(
@@ -1245,10 +1264,10 @@ class _Step4State extends State<Step4> {
                           contentPadding: EdgeInsets.zero,
                           leading: Radio<String>(
                             value: 'Yes',
-                            groupValue: Step4.complianceProtectiveEquipments,
+                            groupValue: Step2.complianceOverTime,
                             onChanged: (value) {
                               setState(() {
-                                Step4.complianceProtectiveEquipments = value;
+                                Step2.complianceOverTime = value;
                               });
                             },
                           ),
@@ -1273,10 +1292,10 @@ class _Step4State extends State<Step4> {
                         contentPadding: EdgeInsets.zero,
                         leading: Radio<String>(
                           value: 'No',
-                          groupValue: Step4.complianceProtectiveEquipments,
+                          groupValue: Step2.complianceOverTime,
                           onChanged: (value) {
                             setState(() {
-                              Step4.complianceProtectiveEquipments = value;
+                              Step2.complianceOverTime = value;
                             });
                           },
                         ),
@@ -1287,7 +1306,7 @@ class _Step4State extends State<Step4> {
               ],
             ),
             CheckboxListTile(
-              value: Step4.priorityProtectiveEquipments,
+              value: Step2.priorityOverTime,
               contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               title: Text(
                 'Priority',
@@ -1299,12 +1318,12 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.priorityProtectiveEquipments = value ?? false;
+                  Step2.priorityOverTime = value ?? false;
                 });
               },
             ),
             CheckboxListTile(
-              value: Step4.actionProtectiveEquipments,
+              value: Step2.actionOverTime,
               contentPadding: EdgeInsets.zero,
               title: Text(
                 'Action if no compliance',
@@ -1316,7 +1335,7 @@ class _Step4State extends State<Step4> {
               ),
               onChanged: (value) {
                 setState(() {
-                  Step4.actionProtectiveEquipments = value ?? false;
+                  Step2.actionOverTime = value ?? false;
                 });
               },
             ),
@@ -1326,7 +1345,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.workersProtectiveEquipments,
+                controller: Step2.workersOverTime,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -1356,7 +1375,7 @@ class _Step4State extends State<Step4> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: TextFormField(
-                controller: Step4.deadlineProtectiveEquipments,
+                controller: Step2.deadlineOverTime,
                 cursorColor: AppColors.primaryColor,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,

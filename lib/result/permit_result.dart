@@ -118,9 +118,10 @@ class _PermitResultState extends State<PermitResult> {
         children: [
           Container(
             color: Colors.grey,
-            child: Image.network(
-              // "assets/images/profile.jpeg",
-              widget.permitData["photo_url"],
+            child: Image.asset(
+              // child: Image.network(
+              "assets/images/profile.jpeg",
+              // widget.permitData["photo_url"],
               width: SizeConfig.imageSizeMultiplier * 38,
               height: SizeConfig.heightMultiplier * 24,
               fit: BoxFit.cover,
@@ -203,7 +204,7 @@ class _PermitResultState extends State<PermitResult> {
         height: SizeConfig.heightMultiplier * 3,
         decoration: BoxDecoration(
             color: statusColor,
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(100),
               bottomRight: Radius.circular(100),
             )),
@@ -212,7 +213,7 @@ class _PermitResultState extends State<PermitResult> {
             widget.permitData["status"],
             style: TextStyle(
               color: Colors.white,
-              fontSize: SizeConfig.textMultiplier * 2,
+              fontSize: SizeConfig.textMultiplier * 1.8,
             ),
           ),
         ),

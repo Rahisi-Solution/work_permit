@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +61,7 @@ class _RejectedSurveysState extends State<RejectedSurveys> {
                     itemBuilder: (context, index) {
                       final survey = surveyProvider.surveys[index];
                       if (survey.status == "Rejected") {
-                        return _rejectedSurveys(survey);
+                        return newVersion2(survey);
                       } else {
                         return Container();
                       }
@@ -103,34 +104,40 @@ class _RejectedSurveysState extends State<RejectedSurveys> {
             children: [
               Padding(
                 padding: EdgeInsets.only(
-                  left: SizeConfig.widthMultiplier * 5,
-                  right: SizeConfig.widthMultiplier * 5,
+                  left: SizeConfig.widthMultiplier * 3,
+                  right: SizeConfig.widthMultiplier * 1,
                   top: SizeConfig.widthMultiplier * 1,
                   bottom: SizeConfig.widthMultiplier * 1,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      data.institution,
-                      style: TextStyle(
-                        fontSize: SizeConfig.textMultiplier * 2,
-                        color: AppColors.primaryColor,
-                      ),
+                    Row(
+                      children: [
+                        Icon(
+                          CupertinoIcons.building_2_fill,
+                          size: SizeConfig.widthMultiplier * 4,
+                          color: const Color(0xffd62839).withOpacity(0.5),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          data.institution,
+                          style: TextStyle(
+                            fontSize: SizeConfig.textMultiplier * 2,
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: SizeConfig.heightMultiplier * 1.0),
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Location : ",
-                          style: TextStyle(
-                            fontSize: SizeConfig.textMultiplier * 2,
-                            color: AppColors.primaryColor.withOpacity(0.6),
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1,
-                          ),
+                        Icon(
+                          CupertinoIcons.location_solid,
+                          size: SizeConfig.widthMultiplier * 4,
+                          color: const Color(0xffd62839).withOpacity(0.5),
                         ),
+                        const SizedBox(width: 5),
                         Expanded(
                           child: Text(
                             data.location,
@@ -145,20 +152,30 @@ class _RejectedSurveysState extends State<RejectedSurveys> {
                     ),
                     SizedBox(height: SizeConfig.heightMultiplier * 1.0),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Date : ",
-                          style: TextStyle(
-                            fontSize: SizeConfig.textMultiplier * 2,
-                            color: AppColors.primaryColor.withOpacity(0.6),
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1,
-                          ),
+                        Row(
+                          children: [
+                            Icon(
+                              CupertinoIcons.paperclip,
+                              size: SizeConfig.widthMultiplier * 4,
+                              color: const Color(0xffd62839).withOpacity(0.5),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              data.referenceNumber,
+                              style: TextStyle(
+                                fontSize: SizeConfig.textMultiplier * 2,
+                                color: AppColors.primaryColor.withOpacity(0.6),
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                          ],
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withOpacity(0.1),
+                            color: const Color(0xffd62839).withOpacity(0.5),
                             borderRadius: BorderRadius.circular(3),
                           ),
                           child: Padding(
@@ -193,6 +210,113 @@ class _RejectedSurveysState extends State<RejectedSurveys> {
                   ),
                 ),
               )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  newVersion2(dynamic data) {
+    return GestureDetector(
+      onTap: () {
+        fetchSingleSurvey(data.referenceNumber);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Container(
+          height: SizeConfig.heightMultiplier * 12,
+          width: SizeConfig.widthMultiplier * 100,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.grey,
+                blurRadius: 4,
+                offset: Offset(0, 0), // Shadow position
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Container(
+                  width: SizeConfig.widthMultiplier * 25,
+                  height: SizeConfig.heightMultiplier * 12,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffd62839).withOpacity(0.7),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(5),
+                      bottomLeft: Radius.circular(5),
+                    ),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      CupertinoIcons.briefcase,
+                      color: Colors.white,
+                      size: SizeConfig.widthMultiplier * 10,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data.institution,
+                          style: TextStyle(
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: SizeConfig.heightMultiplier * 0.5),
+                        Row(
+                          children: [
+                            Text(
+                              "REF : ",
+                              style: TextStyle(
+                                fontSize: SizeConfig.textMultiplier * 1.8,
+                                color: AppColors.primaryColor,
+                              ),
+                            ),
+                            Text(
+                              data.referenceNumber,
+                              style: TextStyle(
+                                fontSize: SizeConfig.textMultiplier * 1.8,
+                                color: const Color(0xffd62839).withOpacity(0.7),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: SizeConfig.heightMultiplier * 0.5),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(CupertinoIcons.calendar, size: SizeConfig.widthMultiplier * 6),
+                            const SizedBox(width: 2),
+                            Text(
+                              formatDate(data.initiatedDate),
+                              style: TextStyle(
+                                fontSize: SizeConfig.textMultiplier * 1.8,
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
