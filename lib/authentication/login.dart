@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:avoid_keyboard/avoid_keyboard.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wps_survey/authentication/forgot_password.dart';
@@ -58,8 +58,9 @@ class _LoginState extends State<Login> {
     }
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarBrightness: Brightness.light,
         statusBarColor: AppColors.primaryColor,
+        // statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.light,
       ),
       child: PopScope(
         canPop: false,
@@ -74,7 +75,7 @@ class _LoginState extends State<Login> {
                 children: [
                   Container(
                     width: SizeConfig.imageSizeMultiplier * 100,
-                    color: AppColors.primaryColor,
+                    decoration: const BoxDecoration(color: AppColors.primaryColor),
                     child: Column(
                       children: [
                         SlideUp(
@@ -109,22 +110,22 @@ class _LoginState extends State<Login> {
                   ),
                   Positioned(
                     bottom: 0,
-                    child: AvoidKeyboard(
-                      child: Container(
-                        width: SizeConfig.imageSizeMultiplier * 100,
-                        height: SizeConfig.heightMultiplier * 65,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(75),
-                          ),
+                    child: Container(
+                      width: SizeConfig.imageSizeMultiplier * 100,
+                      height: SizeConfig.heightMultiplier * 65,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(75),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(height: SizeConfig.heightMultiplier * 8),
-                            Container(
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: SizeConfig.heightMultiplier * 8),
+                          KeyboardAvoider(
+                            child: Container(
                               width: SizeConfig.imageSizeMultiplier * 90,
                               height: SizeConfig.heightMultiplier * 7,
                               decoration: BoxDecoration(
@@ -137,8 +138,8 @@ class _LoginState extends State<Login> {
                                   child: TextField(
                                     controller: inspectorNumber,
                                     cursorColor: AppColors.secondaryColor,
-                                    keyboardType: TextInputType.number,
                                     textInputAction: TextInputAction.next,
+                                    keyboardType: TextInputType.number,
                                     decoration: InputDecoration.collapsed(
                                       hintText: 'Officer Number',
                                       hintStyle: TextStyle(
@@ -155,8 +156,10 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: SizeConfig.heightMultiplier * 2),
-                            Container(
+                          ),
+                          SizedBox(height: SizeConfig.heightMultiplier * 2),
+                          KeyboardAvoider(
+                            child: Container(
                               width: SizeConfig.imageSizeMultiplier * 90,
                               height: SizeConfig.heightMultiplier * 7,
                               decoration: BoxDecoration(
@@ -174,12 +177,12 @@ class _LoginState extends State<Login> {
                                           controller: inspectorPin,
                                           obscureText: _obscureText,
                                           cursorColor: AppColors.secondaryColor,
-                                          keyboardType: const TextInputType.numberWithOptions(),
+                                          keyboardType: TextInputType.number,
                                           textInputAction: TextInputAction.done,
-                                          onEditingComplete: () {
-                                            FocusScope.of(context).unfocus();
-                                            validation();
-                                          },
+                                          // onEditingComplete: () {
+                                          //   FocusScope.of(context).unfocus();
+                                          //   validation();
+                                          // },
                                           decoration: InputDecoration.collapsed(
                                             hintText: 'Officer PIN',
                                             hintStyle: TextStyle(
@@ -213,54 +216,54 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: SizeConfig.heightMultiplier * 5),
-                            GestureDetector(
-                              onTap: () {
-                                validation();
-                              },
-                              child: SlideUp(
-                                delay: 50,
-                                child: Container(
-                                  width: SizeConfig.imageSizeMultiplier * 90,
-                                  height: SizeConfig.heightMultiplier * 7,
-                                  decoration: BoxDecoration(
-                                    color: buttonColor,
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Center(
-                                    child: isLoading
-                                        ? const CircularProgressIndicator(color: Colors.white)
-                                        : Text(
-                                            "Login",
-                                            style: TextStyle(
-                                              fontSize: SizeConfig.textMultiplier * 2.3,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w400,
-                                            ),
+                          ),
+                          SizedBox(height: SizeConfig.heightMultiplier * 5),
+                          GestureDetector(
+                            onTap: () {
+                              validation();
+                            },
+                            child: SlideUp(
+                              delay: 50,
+                              child: Container(
+                                width: SizeConfig.imageSizeMultiplier * 90,
+                                height: SizeConfig.heightMultiplier * 7,
+                                decoration: BoxDecoration(
+                                  color: buttonColor,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Center(
+                                  child: isLoading
+                                      ? const CircularProgressIndicator(color: Colors.white)
+                                      : Text(
+                                          "Login",
+                                          style: TextStyle(
+                                            fontSize: SizeConfig.textMultiplier * 2.3,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w400,
                                           ),
-                                  ),
+                                        ),
                                 ),
                               ),
                             ),
-                            SizedBox(height: SizeConfig.heightMultiplier * 2),
-                            TextButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => const ForgotPassword(),
-                                );
-                              },
-                              child: Text(
-                                "Forgot PIN?",
-                                style: TextStyle(
-                                  fontSize: SizeConfig.textMultiplier * 1.8,
-                                  color: textColor,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                          ),
+                          SizedBox(height: SizeConfig.heightMultiplier * 2),
+                          TextButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => const ForgotPassword(),
+                              );
+                            },
+                            child: Text(
+                              "Forgot PIN?",
+                              style: TextStyle(
+                                fontSize: SizeConfig.textMultiplier * 1.8,
+                                color: textColor,
+                                fontWeight: FontWeight.w500,
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),

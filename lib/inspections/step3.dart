@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wps_survey/helper/size_config.dart';
 
 import '../helper/appcolors.dart';
+import '../widgets/slide_up.dart';
 
 class Step3 extends StatefulWidget {
   const Step3({super.key});
@@ -15,22 +16,22 @@ class Step3 extends StatefulWidget {
   static String? complianceHealthExam;
 
   // Priority variables
-  static bool priorityAnnualLeave = false;
-  static bool priorityMaternityLeave = false;
-  static bool prioritySickLeave = false;
-  static bool priorityEmergenceLeave = false;
-  static bool priorityPublicHoliday = false;
-  static bool priorityOffDays = false;
-  static bool priorityHealthExam = false;
+  static String? priorityAnnualLeave;
+  static String? priorityMaternityLeave;
+  static String? prioritySickLeave;
+  static String? priorityEmergenceLeave;
+  static String? priorityPublicHoliday;
+  static String? priorityOffDays;
+  static String? priorityHealthExam;
 
   // Action variables
-  static bool actionAnnualLeave = false;
-  static bool actionMaternityLeave = false;
-  static bool actionSickLeave = false;
-  static bool actionEmergenceLeave = false;
-  static bool actionPublicHoliday = false;
-  static bool actionOffDays = false;
-  static bool actionHealthExam = false;
+  static TextEditingController actionAnnualLeave = TextEditingController();
+  static TextEditingController actionMaternityLeave = TextEditingController();
+  static TextEditingController actionSickLeave = TextEditingController();
+  static TextEditingController actionEmergenceLeave = TextEditingController();
+  static TextEditingController actionPublicHoliday = TextEditingController();
+  static TextEditingController actionOffDays = TextEditingController();
+  static TextEditingController actionHealthExam = TextEditingController();
 
   // Controllers for number worker affected fields
   static TextEditingController workersAnnualLeave = TextEditingController();
@@ -50,11 +51,58 @@ class Step3 extends StatefulWidget {
   static TextEditingController deadlineOffDays = TextEditingController();
   static TextEditingController deadlineHealthExam = TextEditingController();
 
+  // Priorities dropdown values
+  static List<String> priorities = [
+    'Low',
+    'Medium',
+    'High',
+  ];
+
+  static String? activeField;
+
+  // deadlines of correction
+  static DateTime? annualLeave;
+  static DateTime? maternityLeave;
+  static DateTime? sickLeave;
+  static DateTime? emergenceLeave;
+  static DateTime? publicHoliday;
+  static DateTime? offDays;
+  static DateTime? healthExam;
+
   @override
   State<Step3> createState() => _Step3State();
 }
 
 class _Step3State extends State<Step3> {
+  void _pickDate(BuildContext context) async {
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        if (Step3.activeField == 'annualLeave') {
+          Step3.annualLeave = pickedDate;
+        } else if (Step3.activeField == 'maternityLeave') {
+          Step3.maternityLeave = pickedDate;
+        } else if (Step3.activeField == 'sickLeave') {
+          Step3.sickLeave = pickedDate;
+        } else if (Step3.activeField == 'emergenceLeave') {
+          Step3.emergenceLeave = pickedDate;
+        } else if (Step3.activeField == 'publicHoliday') {
+          Step3.publicHoliday = pickedDate;
+        } else if (Step3.activeField == 'offDays') {
+          Step3.offDays = pickedDate;
+        } else if (Step3.activeField == 'healthExam') {
+          Step3.healthExam = pickedDate;
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,6 +200,7 @@ class _Step3State extends State<Step3> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -223,40 +272,92 @@ class _Step3State extends State<Step3> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step3.priorityAnnualLeave,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step3.priorityAnnualLeave,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step3.priorityAnnualLeave = newValue;
+                      });
+                    },
+                    items: Step3.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.priorityAnnualLeave = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step3.actionAnnualLeave,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.actionAnnualLeave = value ?? false;
-                });
-              },
-            ),
+            Step3.complianceAnnualLeave == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step3.actionAnnualLeave,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -288,31 +389,37 @@ class _Step3State extends State<Step3> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step3.deadlineAnnualLeave,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step3.activeField = 'annualLeave';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step3.annualLeave?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -328,6 +435,7 @@ class _Step3State extends State<Step3> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -399,40 +507,92 @@ class _Step3State extends State<Step3> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step3.priorityMaternityLeave,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step3.priorityMaternityLeave,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step3.priorityMaternityLeave = newValue;
+                      });
+                    },
+                    items: Step3.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.priorityMaternityLeave = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step3.actionMaternityLeave,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.actionMaternityLeave = value ?? false;
-                });
-              },
-            ),
+            Step3.complianceMaternityLeave == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step3.actionMaternityLeave,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -464,31 +624,37 @@ class _Step3State extends State<Step3> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step3.deadlineMaternityLeave,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step3.activeField = 'maternityLeave';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step3.maternityLeave?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -504,6 +670,7 @@ class _Step3State extends State<Step3> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -575,40 +742,92 @@ class _Step3State extends State<Step3> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step3.prioritySickLeave,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step3.prioritySickLeave,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step3.prioritySickLeave = newValue;
+                      });
+                    },
+                    items: Step3.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.prioritySickLeave = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step3.actionSickLeave,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.actionSickLeave = value ?? false;
-                });
-              },
-            ),
+            Step3.complianceSickLeave == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step3.actionSickLeave,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -640,31 +859,37 @@ class _Step3State extends State<Step3> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step3.deadlineSickLeave,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step3.activeField = 'sickLeave';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step3.sickLeave?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -680,6 +905,7 @@ class _Step3State extends State<Step3> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -751,40 +977,92 @@ class _Step3State extends State<Step3> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step3.priorityEmergenceLeave,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step3.priorityEmergenceLeave,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step3.priorityEmergenceLeave = newValue;
+                      });
+                    },
+                    items: Step3.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.priorityEmergenceLeave = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step3.actionEmergenceLeave,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.actionEmergenceLeave = value ?? false;
-                });
-              },
-            ),
+            Step3.complianceEmergenceLeave == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step3.actionEmergenceLeave,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -816,31 +1094,37 @@ class _Step3State extends State<Step3> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step3.deadlineEmergenceLeave,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step3.activeField = 'emergenceLeave';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step3.emergenceLeave?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -856,6 +1140,7 @@ class _Step3State extends State<Step3> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -927,40 +1212,92 @@ class _Step3State extends State<Step3> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step3.priorityPublicHoliday,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step3.priorityPublicHoliday,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step3.priorityPublicHoliday = newValue;
+                      });
+                    },
+                    items: Step3.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.priorityPublicHoliday = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step3.actionPublicHoliday,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.actionPublicHoliday = value ?? false;
-                });
-              },
-            ),
+            Step3.compliancePublicHoliday == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step3.actionPublicHoliday,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -992,31 +1329,37 @@ class _Step3State extends State<Step3> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step3.deadlinePublicHoliday,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step3.activeField = 'publicHoliday';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step3.publicHoliday?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -1032,6 +1375,7 @@ class _Step3State extends State<Step3> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1103,40 +1447,92 @@ class _Step3State extends State<Step3> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step3.priorityOffDays,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step3.priorityOffDays,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step3.priorityOffDays = newValue;
+                      });
+                    },
+                    items: Step3.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.priorityOffDays = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step3.actionOffDays,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.actionOffDays = value ?? false;
-                });
-              },
-            ),
+            Step3.complianceOffDays == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step3.actionOffDays,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -1168,31 +1564,37 @@ class _Step3State extends State<Step3> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step3.deadlineOffDays,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step3.activeField = 'offDays';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step3.offDays?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -1208,6 +1610,7 @@ class _Step3State extends State<Step3> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1279,40 +1682,92 @@ class _Step3State extends State<Step3> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step3.priorityHealthExam,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step3.priorityHealthExam,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step3.priorityHealthExam = newValue;
+                      });
+                    },
+                    items: Step3.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.priorityHealthExam = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step3.actionHealthExam,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step3.actionHealthExam = value ?? false;
-                });
-              },
-            ),
+            Step3.complianceHealthExam == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step3.actionHealthExam,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -1344,31 +1799,37 @@ class _Step3State extends State<Step3> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step3.deadlineHealthExam,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step3.activeField = 'offDays';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step3.healthExam?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),

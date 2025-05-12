@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wps_survey/helper/size_config.dart';
 
 import '../helper/appcolors.dart';
+import '../widgets/slide_up.dart';
 
 class Step4 extends StatefulWidget {
   const Step4({super.key});
@@ -15,22 +16,22 @@ class Step4 extends StatefulWidget {
   static String? complianceProtectiveEquipments;
 
   // Priority variables
-  static bool priorityMedical = false;
-  static bool priorityVentilation = false;
-  static bool priorityLighting = false;
-  static bool priorityNoising = false;
-  static bool priorityFire = false;
-  static bool priorityFirstAid = false;
-  static bool priorityProtectiveEquipments = false;
+  static String? priorityMedical;
+  static String? priorityVentilation;
+  static String? priorityLighting;
+  static String? priorityNoising;
+  static String? priorityFire;
+  static String? priorityFirstAid;
+  static String? priorityProtectiveEquipments;
 
   // Action variables
-  static bool actionMedical = false;
-  static bool actionVentilation = false;
-  static bool actionLighting = false;
-  static bool actionNoising = false;
-  static bool actionFire = false;
-  static bool actionFirstAid = false;
-  static bool actionProtectiveEquipments = false;
+  static TextEditingController actionMedical = TextEditingController();
+  static TextEditingController actionVentilation = TextEditingController();
+  static TextEditingController actionLighting = TextEditingController();
+  static TextEditingController actionNoising = TextEditingController();
+  static TextEditingController actionFire = TextEditingController();
+  static TextEditingController actionFirstAid = TextEditingController();
+  static TextEditingController actionProtectiveEquipments = TextEditingController();
 
   // Controllers for number worker affected fields
   static TextEditingController workersMedical = TextEditingController();
@@ -50,11 +51,59 @@ class Step4 extends StatefulWidget {
   static TextEditingController deadlineFirstAid = TextEditingController();
   static TextEditingController deadlineProtectiveEquipments = TextEditingController();
 
+  // Priorities dropdown values
+  static List<String> priorities = [
+    'Low',
+    'Medium',
+    'High',
+  ];
+
+  static String? activeField;
+
+  // deadlines of correction
+  static DateTime? medical;
+  static DateTime? ventilation;
+  static DateTime? lighting;
+  static DateTime? noising;
+  static DateTime? fire;
+  static DateTime? firstAid;
+  static DateTime? protectiveEquipments;
+
   @override
   State<Step4> createState() => _Step4State();
 }
 
 class _Step4State extends State<Step4> {
+
+  void _pickDate(BuildContext context) async {
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        if (Step4.activeField == 'medical') {
+          Step4.medical = pickedDate;
+        } else if (Step4.activeField == 'ventilation') {
+          Step4.ventilation = pickedDate;
+        } else if (Step4.activeField == 'lighting') {
+          Step4.lighting = pickedDate;
+        } else if (Step4.activeField == 'noising') {
+          Step4.noising = pickedDate;
+        } else if (Step4.activeField == 'fire') {
+          Step4.fire = pickedDate;
+        } else if (Step4.activeField == 'firstAid') {
+          Step4.firstAid = pickedDate;
+        } else if (Step4.activeField == 'protectiveEquipments') {
+          Step4.protectiveEquipments = pickedDate;
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,6 +208,7 @@ class _Step4State extends State<Step4> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -230,40 +280,92 @@ class _Step4State extends State<Step4> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step4.priorityMedical,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step4.priorityMedical,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step4.priorityMedical = newValue;
+                      });
+                    },
+                    items: Step4.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.priorityMedical = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step4.actionMedical,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.actionMedical = value ?? false;
-                });
-              },
-            ),
+            Step4.complianceMedical == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step4.actionMedical,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -295,31 +397,37 @@ class _Step4State extends State<Step4> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step4.deadlineMedical,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step4.activeField = 'medical';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step4.medical?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -335,6 +443,7 @@ class _Step4State extends State<Step4> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -406,40 +515,92 @@ class _Step4State extends State<Step4> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step4.priorityVentilation,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step4.priorityVentilation,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step4.priorityVentilation = newValue;
+                      });
+                    },
+                    items: Step4.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.priorityVentilation = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step4.actionVentilation,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.actionVentilation = value ?? false;
-                });
-              },
-            ),
+            Step4.complianceVentilation == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step4.actionVentilation,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -471,31 +632,37 @@ class _Step4State extends State<Step4> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step4.deadlineVentilation,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step4.activeField = 'ventilation';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step4.ventilation?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -511,6 +678,7 @@ class _Step4State extends State<Step4> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -582,40 +750,92 @@ class _Step4State extends State<Step4> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step4.priorityLighting,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step4.priorityLighting,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step4.priorityLighting = newValue;
+                      });
+                    },
+                    items: Step4.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.priorityLighting = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step4.actionLighting,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.actionLighting = value ?? false;
-                });
-              },
-            ),
+            Step4.complianceLighting == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step4.actionLighting,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -647,31 +867,37 @@ class _Step4State extends State<Step4> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step4.deadlineLighting,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step4.activeField = 'lighting';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step4.lighting?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -687,6 +913,7 @@ class _Step4State extends State<Step4> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -758,40 +985,92 @@ class _Step4State extends State<Step4> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step4.priorityNoising,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step4.priorityNoising,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step4.priorityNoising = newValue;
+                      });
+                    },
+                    items: Step4.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.priorityNoising = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step4.actionNoising,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.actionNoising = value ?? false;
-                });
-              },
-            ),
+            Step4.complianceNoising == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step4.actionNoising,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -823,31 +1102,37 @@ class _Step4State extends State<Step4> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step4.deadlineNoising,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step4.activeField = 'noising';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step4.noising?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -863,6 +1148,7 @@ class _Step4State extends State<Step4> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -934,40 +1220,92 @@ class _Step4State extends State<Step4> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step4.priorityFire,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step4.priorityFire,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step4.priorityFire = newValue;
+                      });
+                    },
+                    items: Step4.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.priorityFire = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step4.actionFire,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.actionFire = value ?? false;
-                });
-              },
-            ),
+            Step4.complianceFire == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step4.actionFire,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -999,31 +1337,37 @@ class _Step4State extends State<Step4> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step4.deadlineFire,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step4.activeField = 'fire';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step4.fire?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -1039,6 +1383,7 @@ class _Step4State extends State<Step4> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1110,40 +1455,92 @@ class _Step4State extends State<Step4> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step4.priorityFirstAid,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step4.priorityFirstAid,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step4.priorityFirstAid = newValue;
+                      });
+                    },
+                    items: Step4.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.priorityFirstAid = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step4.actionFirstAid,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.actionFirstAid = value ?? false;
-                });
-              },
-            ),
+            Step4.complianceFirstAid == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step4.actionFirstAid,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -1175,31 +1572,37 @@ class _Step4State extends State<Step4> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step4.deadlineFirstAid,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step4.activeField = 'firstAid';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step4.firstAid?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -1215,6 +1618,7 @@ class _Step4State extends State<Step4> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1286,40 +1690,92 @@ class _Step4State extends State<Step4> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step4.priorityProtectiveEquipments,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step4.priorityProtectiveEquipments,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step4.priorityProtectiveEquipments = newValue;
+                      });
+                    },
+                    items: Step4.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.priorityProtectiveEquipments = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step4.actionProtectiveEquipments,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step4.actionProtectiveEquipments = value ?? false;
-                });
-              },
-            ),
+            Step4.complianceProtectiveEquipments == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step4.actionProtectiveEquipments,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -1351,31 +1807,37 @@ class _Step4State extends State<Step4> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step4.deadlineProtectiveEquipments,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step4.activeField = 'protectiveEquipments';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step4.protectiveEquipments?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),

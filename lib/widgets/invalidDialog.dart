@@ -1,20 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wps_survey/helper/appcolors.dart';
 import 'package:wps_survey/helper/size_config.dart';
 import 'package:wps_survey/screens/welcome.dart';
 import 'package:wps_survey/widgets/slide_up.dart';
 
-import '../helper/appcolors.dart';
-
-class ConfirmDialog extends StatefulWidget {
+class InvalidPermitDialog extends StatefulWidget {
   final dynamic data;
-  const ConfirmDialog({super.key, this.data});
+  const InvalidPermitDialog({super.key, this.data});
 
   @override
-  State<ConfirmDialog> createState() => _ConfirmDialogState();
+  State<InvalidPermitDialog> createState() => _InvalidPermitDialogState();
 }
 
-class _ConfirmDialogState extends State<ConfirmDialog> {
+class _InvalidPermitDialogState extends State<InvalidPermitDialog> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -25,26 +24,27 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
           width: SizeConfig.imageSizeMultiplier * 90,
           child: Material(
             borderRadius: BorderRadius.circular(10),
+            color: const Color(0XFFdb504F),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SlideUp(
                   delay: 60,
                   child: Icon(
-                    CupertinoIcons.check_mark_circled,
-                    color: Colors.green,
-                    size: SizeConfig.imageSizeMultiplier * 20,
+                    CupertinoIcons.xmark_circle,
+                    color: Colors.white,
+                    size: SizeConfig.imageSizeMultiplier * 15,
                   ),
                 ),
                 Text(
-                  "Inspection Saved Successfully",
+                  "Invalid permit",
                   style: TextStyle(
-                    fontSize: SizeConfig.textMultiplier * 2.5,
-                    color: AppColors.primaryColor,
+                    fontSize: SizeConfig.textMultiplier * 3.5,
+                    color: Colors.white,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                SizedBox(height: SizeConfig.heightMultiplier * 5),
+                SizedBox(height: SizeConfig.heightMultiplier * 3),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -62,7 +62,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
                       width: SizeConfig.imageSizeMultiplier * 70,
                       height: SizeConfig.heightMultiplier * 8,
                       decoration: BoxDecoration(
-                        color: AppColors.primaryColor,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Center(
@@ -70,7 +70,7 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
                           "Ok",
                           style: TextStyle(
                             fontSize: SizeConfig.textMultiplier * 2.5,
-                            color: Colors.white,
+                            color: AppColors.primaryColor,
                             fontWeight: FontWeight.w400,
                           ),
                         ),

@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wps_survey/screens/home.dart';
+import 'package:wps_survey/screens/welcome.dart';
 
 import '../helper/appcolors.dart';
 import '../helper/size_config.dart';
@@ -46,7 +46,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Change Password',
+          'Change PIN',
           style: TextStyle(
             fontSize: SizeConfig.textMultiplier * 2.5,
             color: Colors.white,
@@ -110,7 +110,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 ),
                 SizedBox(height: SizeConfig.heightMultiplier * 1),
                 Text(
-                  'CHANGE PASSWORD',
+                  'CONFIRM CHANGE PIN',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: SizeConfig.textMultiplier * 2,
@@ -122,7 +122,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   child: SizedBox(
                     width: SizeConfig.widthMultiplier * 70,
                     child: Text(
-                      'Please enter your current password and set a new password',
+                      'Please enter your current PIN and set a new PIN',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
@@ -140,7 +140,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'OLD PASSWORD',
+                            'OLD PIN',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: SizeConfig.textMultiplier * 1.5,
@@ -151,7 +151,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             height: appHeight / 17,
                             width: appWidth / 1.1,
                             decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2.0),
+                              border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 1),
                               borderRadius: BorderRadius.circular(3.0),
                             ),
                             alignment: Alignment.centerLeft,
@@ -159,7 +159,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               padding: EdgeInsets.symmetric(horizontal: appHeight * 0.005),
                               child: TextField(
                                 controller: _oldPasswordController,
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.text,
                                 textInputAction: TextInputAction.next,
                                 style: TextStyle(
                                   fontSize: SizeConfig.textMultiplier * 1.8,
@@ -167,18 +167,19 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   color: AppColors.primaryColor.withOpacity(0.7),
                                 ),
                                 decoration: InputDecoration.collapsed(
-                                  hintText: 'Enter old password',
+                                  hintText: 'Enter old PIN',
                                   hintStyle: TextStyle(
                                     fontSize: SizeConfig.textMultiplier * 1.5,
                                     color: AppColors.primaryColor.withOpacity(0.3),
                                   ),
                                 ),
+                                cursorColor: AppColors.primaryColor.withOpacity(0.7),
                               ),
                             ),
                           ),
                           SizedBox(height: SizeConfig.heightMultiplier * 2),
                           Text(
-                            'NEW PASSWORD',
+                            'NEW PIN',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: SizeConfig.textMultiplier * 1.5,
@@ -189,7 +190,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             height: appHeight / 17,
                             width: appWidth / 1.1,
                             decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2.0),
+                              border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 1),
                               borderRadius: BorderRadius.circular(3.0),
                             ),
                             alignment: Alignment.centerLeft,
@@ -197,16 +198,17 @@ class _ChangePasswordState extends State<ChangePassword> {
                               padding: EdgeInsets.symmetric(horizontal: appHeight * 0.005),
                               child: TextField(
                                 controller: _newPasswordController,
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.text,
                                 textInputAction: TextInputAction.next,
                                 obscureText: _obscurePassword,
+                                cursorColor: AppColors.primaryColor.withOpacity(0.7),
                                 style: TextStyle(
                                   fontSize: SizeConfig.textMultiplier * 1.8,
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.primaryColor.withOpacity(0.7),
                                 ),
                                 decoration: InputDecoration(
-                                  hintText: 'Enter new password',
+                                  hintText: 'Enter new PIN',
                                   hintStyle: TextStyle(
                                     fontSize: SizeConfig.textMultiplier * 1.5,
                                     color: AppColors.primaryColor.withOpacity(0.3),
@@ -218,7 +220,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                       padding: EdgeInsets.symmetric(horizontal: appHeight * 0.01),
                                       child: Icon(
                                         _obscurePassword ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
-                                        color: Colors.black,
+                                        color: AppColors.primaryColor.withOpacity(0.6),
                                       ),
                                     ),
                                   ),
@@ -228,7 +230,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           ),
                           SizedBox(height: SizeConfig.heightMultiplier * 2),
                           Text(
-                            'CONFIRM NEW PASSWORD',
+                            'CONFIRM NEW PIN',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: SizeConfig.textMultiplier * 1.5,
@@ -239,7 +241,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             height: appHeight / 17,
                             width: appWidth / 1.1,
                             decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 2.0),
+                              border: Border.all(color: AppColors.primaryColor.withOpacity(0.3), width: 1),
                               borderRadius: BorderRadius.circular(3.0),
                             ),
                             alignment: Alignment.centerLeft,
@@ -247,16 +249,17 @@ class _ChangePasswordState extends State<ChangePassword> {
                               padding: EdgeInsets.symmetric(horizontal: appHeight * 0.005),
                               child: TextField(
                                 controller: _confirmPasswordController,
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.text,
                                 textInputAction: TextInputAction.done,
                                 obscureText: _obscurePassword2,
+                                cursorColor: AppColors.primaryColor.withOpacity(0.7),
                                 style: TextStyle(
                                   fontSize: SizeConfig.textMultiplier * 1.8,
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.primaryColor.withOpacity(0.7),
                                 ),
                                 decoration: InputDecoration(
-                                  hintText: 'Re-enter new password',
+                                  hintText: 'Re-enter new PIN',
                                   border: InputBorder.none,
                                   hintStyle: TextStyle(
                                     fontSize: SizeConfig.textMultiplier * 1.5,
@@ -268,7 +271,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                       padding: EdgeInsets.symmetric(horizontal: appHeight * 0.01),
                                       child: Icon(
                                         _obscurePassword2 ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
-                                        color: Colors.black,
+                                        color: AppColors.primaryColor.withOpacity(0.6),
                                       ),
                                     ),
                                   ),
@@ -292,9 +295,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   _confirmPasswordController.text.trim(),
                                 );
                               },
-                              child: const Text(
-                                'RESET PASSWORD',
-                                style: TextStyle(
+                              child: Text(
+                                'Request change pin'.toUpperCase(),
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
@@ -375,12 +378,12 @@ class _ChangePasswordState extends State<ChangePassword> {
     return Center(
       child: Material(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.green[600],
+        color: Colors.green[800],
         child: Container(
           height: SizeConfig.heightMultiplier * 40,
           width: SizeConfig.widthMultiplier * 95,
           decoration: BoxDecoration(
-            color: Colors.green[600],
+            color: Colors.green[700],
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
@@ -395,7 +398,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 ),
                 SizedBox(height: SizeConfig.heightMultiplier * 2),
                 Text(
-                  'Password changed successfully, please login with your new password!',
+                  'PIN changed successfully, please login with your new PIN!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
@@ -408,7 +411,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => Home(
+                        builder: (_) => WelcomeScreen(
                           splashData: widget.splashData,
                         ),
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -123,8 +124,8 @@ class DatabaseHelper {
   Future<int> totalPendingInspections() async {
     final db = await database;
     final result = await db.rawQuery(
-      'SELECT COUNT(*) as total FROM surveys WHERE status = ?',
-      ['Pending Survey'],
+      'SELECT COUNT(*) as total FROM surveys WHERE status IN (?, ?)',
+      ['Pending Survey', 'Pending Survey Completion'],
     );
     return Sqflite.firstIntValue(result) ?? 0;
   }
@@ -144,6 +145,13 @@ class DatabaseHelper {
       'SELECT COUNT(*) as total FROM surveys WHERE status = ?',
       ['Rejected'],
     );
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
+
+  Future<int> totalSurveysToday() async {
+    final db = await database;
+    String today = DateFormat('dd-MM-yyyy').format(DateTime.now()); // Get today's date in YYYY-MM-DD format
+    final result = await db.rawQuery("SELECT COUNT(*) as total FROM surveys WHERE DATE(initiated_date) = ?", [today]);
     return Sqflite.firstIntValue(result) ?? 0;
   }
 }

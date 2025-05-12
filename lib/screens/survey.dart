@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wps_survey/helper/appcolors.dart';
@@ -32,16 +31,16 @@ class _SurveyScreenState extends State<SurveyScreen> {
             color: Colors.white,
           ),
         ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            CupertinoIcons.back,
-            color: Colors.white,
-            size: SizeConfig.widthMultiplier * 7,
-          ),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        //   icon: Icon(
+        //     CupertinoIcons.back,
+        //     color: Colors.white,
+        //     size: SizeConfig.widthMultiplier * 7,
+        //   ),
+        // ),
       ),
       body: SafeArea(
         child: DefaultTabController(

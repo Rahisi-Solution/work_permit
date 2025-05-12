@@ -49,6 +49,7 @@ dependencies:
   avoid_keyboard:
   intl:
   fl_chart:
+  keyboard_avoider:
 
 dev_dependencies:
   flutter_test:

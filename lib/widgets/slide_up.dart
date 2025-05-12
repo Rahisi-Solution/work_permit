@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class SlideUp extends StatefulWidget {
@@ -23,7 +24,7 @@ class _SlideUpState extends State<SlideUp> with TickerProviderStateMixin {
     final curve = CurvedAnimation(curve: Curves.decelerate, parent: _controller);
     _offset = Tween<Offset>(begin: Offset(0.0, 0.35), end: Offset.zero).animate(curve);
 
-    if(widget.delay == null) {
+    if (widget.delay == null) {
       _controller.forward();
     } else {
       Timer(Duration(milliseconds: widget.delay!), () {
@@ -41,5 +42,11 @@ class _SlideUpState extends State<SlideUp> with TickerProviderStateMixin {
         child: widget.child,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

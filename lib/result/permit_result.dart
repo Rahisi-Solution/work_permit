@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wps_survey/helper/appcolors.dart';
-import 'package:wps_survey/screens/home.dart';
+import 'package:wps_survey/screens/welcome.dart';
 
 import '../helper/size_config.dart';
 import '../provider/theme_provider.dart';
@@ -59,7 +59,7 @@ class _PermitResultState extends State<PermitResult> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => Home(
+                        builder: (_) => WelcomeScreen(
                           splashData: widget.splashData,
                         ),
                       ),
@@ -118,10 +118,10 @@ class _PermitResultState extends State<PermitResult> {
         children: [
           Container(
             color: Colors.grey,
-            child: Image.asset(
-              // child: Image.network(
-              "assets/images/profile.jpeg",
-              // widget.permitData["photo_url"],
+            // child: Image.asset(
+            child: Image.network(
+              // "assets/images/profile.jpeg",
+              widget.permitData["photo_url"],
               width: SizeConfig.imageSizeMultiplier * 38,
               height: SizeConfig.heightMultiplier * 24,
               fit: BoxFit.cover,

@@ -40,16 +40,16 @@ class _SettingsState extends State<Settings> {
             color: Colors.white,
           ),
         ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            CupertinoIcons.back,
-            color: Colors.white,
-            size: SizeConfig.widthMultiplier * 7,
-          ),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        //   icon: Icon(
+        //     CupertinoIcons.back,
+        //     color: Colors.white,
+        //     size: SizeConfig.widthMultiplier * 7,
+        //   ),
+        // ),
         backgroundColor: AppColors.primaryColor,
         centerTitle: true,
       ),
@@ -153,7 +153,7 @@ class _SettingsState extends State<Settings> {
     return Container(
       width: SizeConfig.widthMultiplier * 100,
       height: SizeConfig.heightMultiplier * 40,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(70),

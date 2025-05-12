@@ -40,6 +40,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           height: SizeConfig.heightMultiplier * 55,
           width: SizeConfig.widthMultiplier * 95,
           child: Material(
+            borderRadius: BorderRadius.circular(10),
             child: Stack(
               children: [
                 Column(

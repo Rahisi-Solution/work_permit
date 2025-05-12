@@ -54,7 +54,7 @@ class _LogoutState extends State<Logout> with SingleTickerProviderStateMixin {
     } else {
       textColor = AppColors.primaryColor;
       textColor2 = const Color(0xFF6c757d);
-      materialColor = const Color(0xFFdee2e6);
+      materialColor = Colors.white;
     }
     return Center(
       child: Material(
@@ -78,13 +78,19 @@ class _LogoutState extends State<Logout> with SingleTickerProviderStateMixin {
                   _topImage(),
                   Center(
                     child: Text(
-                      'Logout',
+                      'Confirm Logout',
                       style: TextStyle(
                         color: textColor,
                         fontSize: SizeConfig.textMultiplier * 3,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                  ),
+                  SizedBox(height: SizeConfig.heightMultiplier * 2),
+                  Container(
+                    width: SizeConfig.widthMultiplier * 90,
+                    height: 0.5,
+                    color: Colors.grey[300],
                   ),
                   SizedBox(height: SizeConfig.heightMultiplier * 3),
                   Center(
@@ -97,20 +103,17 @@ class _LogoutState extends State<Logout> with SingleTickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  SizedBox(height: SizeConfig.heightMultiplier * 2),
-                  Divider(color: Colors.grey[400]),
                   SizedBox(height: SizeConfig.heightMultiplier * 3),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         height: 50,
-                        width: MediaQuery.of(context).size.width / 4,
+                        width: MediaQuery.of(context).size.width / 3.2,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFced4da),
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(10.0),
                           border: Border.all(
-                            color: AppColors.primaryColor.withOpacity(0.3),
+                            color: AppColors.primaryColor,
                             width: 1.4,
                           ),
                         ),
@@ -119,30 +122,32 @@ class _LogoutState extends State<Logout> with SingleTickerProviderStateMixin {
                             Navigator.pop(context);
                           },
                           child: Text(
-                            'CANCEL',
+                            'NO',
                             style: TextStyle(
                               color: AppColors.primaryColor,
                               fontSize: SizeConfig.heightMultiplier * 1.8,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ),
                       Container(
                         height: 50,
-                        width: MediaQuery.of(context).size.width / 4,
+                        width: MediaQuery.of(context).size.width / 3.2,
                         decoration: BoxDecoration(
                           color: const Color(0xFFfe6d73),
-                          borderRadius: BorderRadius.circular(3.0),
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: TextButton(
                           onPressed: () {
                             _logout(context);
                           },
-                          child: const Text(
+                          child: Text(
                             'YES',
                             style: TextStyle(
-                              color: Color(0xFFf8f9fa),
-                              fontSize: 16,
+                              color: const Color(0xFFf8f9fa),
+                              fontSize: SizeConfig.textMultiplier * 2,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -164,19 +169,17 @@ class _LogoutState extends State<Logout> with SingleTickerProviderStateMixin {
       child: Center(
         child: Container(
           height: SizeConfig.heightMultiplier * 10,
-          width: SizeConfig.widthMultiplier * 20,
+          width: SizeConfig.widthMultiplier * 15,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.white70,
             border: Border.all(
               color: AppColors.primaryColor,
-              width: 3,
+              width: 2,
             ),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(SizeConfig.heightMultiplier * 0.1),
-            child: Image.asset(
-              'assets/images/smz_logo.png',
+            image: const DecorationImage(
+              image: AssetImage("assets/images/smz_logo.png"),
+              fit: BoxFit.contain,
             ),
           ),
         ),
@@ -189,6 +192,7 @@ class _LogoutState extends State<Logout> with SingleTickerProviderStateMixin {
     await prefs.clear(); // Clears all stored data. Adjust based on your needs.
 
     // Redirect to login screen
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => Login()), (route) => false);
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (_) => const Login()), (route) => false);
   }
 }

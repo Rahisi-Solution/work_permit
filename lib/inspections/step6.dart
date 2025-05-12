@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wps_survey/helper/size_config.dart';
 
 import '../../helper/appcolors.dart';
+import '../widgets/slide_up.dart';
 
 class Step6 extends StatefulWidget {
   const Step6({super.key});
@@ -17,26 +18,26 @@ class Step6 extends StatefulWidget {
   static String? complianceLabourTraining;
 
   // Priority variables
-  static bool priorityLocal = false;
-  static bool priorityForeigner = false;
-  static bool priorityCollectiveBargaining = false;
-  static bool prioritySocialSecurity = false;
-  static bool prioritySchemeOfService = false;
-  static bool prioritySalaryIncrement = false;
-  static bool priorityPerformanceAppraisal = false;
-  static bool prioritySuccessionPlanning = false;
-  static bool priorityLabourTraining = false;
+  static String? priorityLocal;
+  static String? priorityForeigner;
+  static String? priorityCollectiveBargaining;
+  static String? prioritySocialSecurity;
+  static String? prioritySchemeOfService;
+  static String? prioritySalaryIncrement;
+  static String? priorityPerformanceAppraisal;
+  static String? prioritySuccessionPlanning;
+  static String? priorityLabourTraining;
 
   // Action variables
-  static bool actionLocal = false;
-  static bool actionForeigner = false;
-  static bool actionCollectiveBargaining = false;
-  static bool actionSocialSecurity = false;
-  static bool actionSchemeOfService = false;
-  static bool actionSalaryIncrement = false;
-  static bool actionPerformanceAppraisal = false;
-  static bool actionSuccessionPlanning = false;
-  static bool actionLabourTraining = false;
+  static TextEditingController actionLocal = TextEditingController();
+  static TextEditingController actionForeigner = TextEditingController();
+  static TextEditingController actionCollectiveBargaining = TextEditingController();
+  static TextEditingController actionSocialSecurity = TextEditingController();
+  static TextEditingController actionSchemeOfService = TextEditingController();
+  static TextEditingController actionSalaryIncrement = TextEditingController();
+  static TextEditingController actionPerformanceAppraisal = TextEditingController();
+  static TextEditingController actionSuccessionPlanning = TextEditingController();
+  static TextEditingController actionLabourTraining = TextEditingController();
 
   // Controllers for number worker affected fields
   static TextEditingController workersLocal = TextEditingController();
@@ -49,22 +50,75 @@ class Step6 extends StatefulWidget {
   static TextEditingController workersSuccessionPlanning = TextEditingController();
   static TextEditingController workersLabourTraining = TextEditingController();
 
-  // Controllers for deadlines fields
-  static TextEditingController deadlineLocal = TextEditingController();
-  static TextEditingController deadlineForeigner = TextEditingController();
-  static TextEditingController deadlineCollectiveBargaining = TextEditingController();
-  static TextEditingController deadlineSocialSecurity = TextEditingController();
-  static TextEditingController deadlineSchemeOfService = TextEditingController();
-  static TextEditingController deadlineSalaryIncrement = TextEditingController();
-  static TextEditingController deadlinePerformanceAppraisal = TextEditingController();
-  static TextEditingController deadlineSuccessionPlanning = TextEditingController();
-  static TextEditingController deadlineLabourTraining = TextEditingController();
+  // Priorities dropdown values
+  static List<String> priorities = [
+    'Low',
+    'Medium',
+    'High',
+  ];
+
+  static String? activeField;
+
+  // deadlines of correction
+  static DateTime? local;
+  static DateTime? foreigner;
+  static DateTime? collectiveBargaining;
+  static DateTime? socialSecurity;
+  static DateTime? schemeOfService;
+  static DateTime? salaryIncrement;
+  static DateTime? performanceAppraisal;
+  static DateTime? successionPlanning;
+  static DateTime? labourTraining;
 
   @override
   State<Step6> createState() => _Step6State();
 }
 
 class _Step6State extends State<Step6> {
+  void _pickDate(BuildContext context) async {
+    final pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100),
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData.dark().copyWith(
+              colorScheme: const ColorScheme.light(
+                onPrimary: Colors.white, // selected text color
+                onSurface: AppColors.secondaryColor, // default text color
+                primary: AppColors.primaryColor, // circle color
+              ),
+            ),
+            child: child!,
+          );
+        });
+
+    if (pickedDate != null) {
+      setState(() {
+        if (Step6.activeField == 'local') {
+          Step6.local = pickedDate;
+        } else if (Step6.activeField == 'foreigner') {
+          Step6.foreigner = pickedDate;
+        } else if (Step6.activeField == 'collectiveBargaining') {
+          Step6.collectiveBargaining = pickedDate;
+        } else if (Step6.activeField == 'socialSecurity') {
+          Step6.socialSecurity = pickedDate;
+        } else if (Step6.activeField == 'schemeOfService') {
+          Step6.schemeOfService = pickedDate;
+        } else if (Step6.activeField == 'salaryIncrement') {
+          Step6.salaryIncrement = pickedDate;
+        } else if (Step6.activeField == 'performanceAppraisal') {
+          Step6.performanceAppraisal = pickedDate;
+        } else if (Step6.activeField == 'successionPlanning') {
+          Step6.successionPlanning = pickedDate;
+        } else if (Step6.activeField == 'labourTraining') {
+          Step6.labourTraining = pickedDate;
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -189,6 +243,7 @@ class _Step6State extends State<Step6> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -260,40 +315,92 @@ class _Step6State extends State<Step6> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step6.priorityLocal,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step6.priorityLocal,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step6.priorityLocal = newValue;
+                      });
+                    },
+                    items: Step6.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.priorityLocal = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step6.actionLocal,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.actionLocal = value ?? false;
-                });
-              },
-            ),
+            Step6.complianceLocal == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step6.actionLocal,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -325,31 +432,37 @@ class _Step6State extends State<Step6> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step6.deadlineLocal,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step6.activeField = 'local';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step6.local?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -365,6 +478,7 @@ class _Step6State extends State<Step6> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -436,40 +550,92 @@ class _Step6State extends State<Step6> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step6.priorityForeigner,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step6.priorityForeigner,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step6.priorityForeigner = newValue;
+                      });
+                    },
+                    items: Step6.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.priorityForeigner = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step6.actionForeigner,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.actionForeigner = value ?? false;
-                });
-              },
-            ),
+            Step6.complianceForeigner == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step6.actionForeigner,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -501,31 +667,37 @@ class _Step6State extends State<Step6> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step6.deadlineForeigner,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step6.activeField = 'foreigner';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step6.foreigner?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -541,6 +713,7 @@ class _Step6State extends State<Step6> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -612,40 +785,92 @@ class _Step6State extends State<Step6> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step6.priorityCollectiveBargaining,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step6.priorityCollectiveBargaining,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step6.priorityCollectiveBargaining = newValue;
+                      });
+                    },
+                    items: Step6.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.priorityCollectiveBargaining = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step6.actionCollectiveBargaining,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.actionCollectiveBargaining = value ?? false;
-                });
-              },
-            ),
+            Step6.complianceCollectiveBargaining == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step6.actionCollectiveBargaining,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -677,31 +902,37 @@ class _Step6State extends State<Step6> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step6.deadlineCollectiveBargaining,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step6.activeField = 'collectiveBargaining';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step6.collectiveBargaining?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -717,6 +948,7 @@ class _Step6State extends State<Step6> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -788,40 +1020,92 @@ class _Step6State extends State<Step6> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step6.prioritySocialSecurity,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step6.prioritySocialSecurity,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step6.prioritySocialSecurity = newValue;
+                      });
+                    },
+                    items: Step6.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.prioritySocialSecurity = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step6.actionSocialSecurity,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.actionSocialSecurity = value ?? false;
-                });
-              },
-            ),
+            Step6.complianceSocialSecurity == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step6.actionSocialSecurity,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -853,31 +1137,37 @@ class _Step6State extends State<Step6> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step6.deadlineSocialSecurity,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step6.activeField = 'socialSecurity';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step6.socialSecurity?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -893,6 +1183,7 @@ class _Step6State extends State<Step6> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -964,40 +1255,92 @@ class _Step6State extends State<Step6> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step6.prioritySchemeOfService,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step6.prioritySchemeOfService,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step6.prioritySchemeOfService = newValue;
+                      });
+                    },
+                    items: Step6.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.prioritySchemeOfService = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step6.actionSchemeOfService,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.actionSchemeOfService = value ?? false;
-                });
-              },
-            ),
+            Step6.complianceSchemeOfService == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step6.actionSchemeOfService,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -1029,31 +1372,37 @@ class _Step6State extends State<Step6> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step6.deadlineSchemeOfService,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step6.activeField = 'schemeOfService';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step6.schemeOfService?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -1069,6 +1418,7 @@ class _Step6State extends State<Step6> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1140,40 +1490,92 @@ class _Step6State extends State<Step6> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step6.prioritySalaryIncrement,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step6.prioritySalaryIncrement,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step6.prioritySalaryIncrement = newValue;
+                      });
+                    },
+                    items: Step6.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.prioritySalaryIncrement = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step6.actionSalaryIncrement,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.actionSalaryIncrement = value ?? false;
-                });
-              },
-            ),
+            Step6.complianceSalaryIncrement == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step6.actionSalaryIncrement,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -1205,31 +1607,37 @@ class _Step6State extends State<Step6> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step6.deadlineSalaryIncrement,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step6.activeField = 'salaryIncrement';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step6.salaryIncrement?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -1245,6 +1653,7 @@ class _Step6State extends State<Step6> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1316,40 +1725,92 @@ class _Step6State extends State<Step6> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step6.priorityPerformanceAppraisal,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step6.priorityPerformanceAppraisal,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step6.priorityPerformanceAppraisal = newValue;
+                      });
+                    },
+                    items: Step6.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.priorityPerformanceAppraisal = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step6.actionPerformanceAppraisal,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.actionPerformanceAppraisal = value ?? false;
-                });
-              },
-            ),
+            Step6.compliancePerformanceAppraisal == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step6.actionPerformanceAppraisal,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -1381,31 +1842,37 @@ class _Step6State extends State<Step6> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step6.deadlinePerformanceAppraisal,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step6.activeField = 'performanceAppraisal';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step6.performanceAppraisal?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -1421,6 +1888,7 @@ class _Step6State extends State<Step6> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1492,40 +1960,92 @@ class _Step6State extends State<Step6> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step6.prioritySuccessionPlanning,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step6.prioritySuccessionPlanning,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step6.prioritySuccessionPlanning = newValue;
+                      });
+                    },
+                    items: Step6.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.prioritySuccessionPlanning = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step6.actionSuccessionPlanning,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.actionSuccessionPlanning = value ?? false;
-                });
-              },
-            ),
+            Step6.complianceSuccessionPlanning == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step6.actionSuccessionPlanning,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -1557,31 +2077,37 @@ class _Step6State extends State<Step6> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step6.deadlineSuccessionPlanning,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step6.activeField = 'successionPlanning';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step6.successionPlanning?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -1597,6 +2123,7 @@ class _Step6State extends State<Step6> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1668,40 +2195,92 @@ class _Step6State extends State<Step6> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step6.priorityLabourTraining,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step6.priorityLabourTraining,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step6.priorityLabourTraining = newValue;
+                      });
+                    },
+                    items: Step6.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.priorityLabourTraining = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step6.actionLabourTraining,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step6.actionLabourTraining = value ?? false;
-                });
-              },
-            ),
+            Step6.complianceLabourTraining == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step6.actionLabourTraining,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -1733,31 +2312,37 @@ class _Step6State extends State<Step6> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step6.deadlineLabourTraining,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step6.activeField = 'labourTraining';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step6.labourTraining?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),

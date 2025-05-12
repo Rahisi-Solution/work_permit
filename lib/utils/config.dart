@@ -23,6 +23,10 @@ class Config {
 
   static const String token = "app_token";
   static const String username = "username";
+  static const String pendingInspections = "0";
+  static const String completedInspections = "0";
+  static const String rejectedInspections = "0";
+  static const String totalInspections = "0";
 
   static Future customFlushbar(String title, String notice, BuildContext context) {
     return Flushbar(

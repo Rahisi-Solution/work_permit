@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wps_survey/helper/size_config.dart';
+import 'package:wps_survey/widgets/slide_up.dart';
 
 import '../helper/appcolors.dart';
 
@@ -14,22 +15,22 @@ class Step2 extends StatefulWidget {
   static String? complianceOverTime;
 
   // Priority variables
-  static bool priorityPermanent = false;
-  static bool priorityFixed = false;
-  static bool priorityPartTime = false;
-  static bool priorityDailyPaid = false;
-  static bool priorityOralContract = false;
-  static bool priorityWorkingHours = false;
-  static bool priorityOverTime = false;
+  static String? priorityPermanent;
+  static String? priorityFixed;
+  static String? priorityPartTime;
+  static String? priorityDailyPaid;
+  static String? priorityOralContract;
+  static String? priorityWorkingHours;
+  static String? priorityOverTime;
 
   // Action variables
-  static bool actionPermanent = false;
-  static bool actionFixed = false;
-  static bool actionPartTime = false;
-  static bool actionDailyPaid = false;
-  static bool actionOralContract = false;
-  static bool actionWorkingHours = false;
-  static bool actionOverTime = false;
+  static TextEditingController actionPermanent = TextEditingController();
+  static TextEditingController actionFixed = TextEditingController();
+  static TextEditingController actionPartTime = TextEditingController();
+  static TextEditingController actionDailyPaid = TextEditingController();
+  static TextEditingController actionOralContract = TextEditingController();
+  static TextEditingController actionWorkingHours = TextEditingController();
+  static TextEditingController actionOverTime = TextEditingController();
 
   // Controllers for number worker affected fields
   static TextEditingController workersPermanent = TextEditingController();
@@ -48,11 +49,59 @@ class Step2 extends StatefulWidget {
   static TextEditingController deadlineOralContract = TextEditingController();
   static TextEditingController deadlineWorkingHours = TextEditingController();
   static TextEditingController deadlineOverTime = TextEditingController();
+
+  // Priorities dropdown values
+  static List<String> priorities = [
+    'Low',
+    'Medium',
+    'High',
+  ];
+
+  static String? activeField;
+
+  // deadlines of correction
+  static DateTime? permanent;
+  static DateTime? fixed;
+  static DateTime? partTime;
+  static DateTime? dailyPaid;
+  static DateTime? oralContract;
+  static DateTime? workingHours;
+  static DateTime? overTime;
+
   @override
   _Step2State createState() => _Step2State();
 }
 
 class _Step2State extends State<Step2> {
+  void _pickDate(BuildContext context) async {
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        if (Step2.activeField == 'permanent') {
+          Step2.permanent = pickedDate;
+        } else if (Step2.activeField == 'fixed') {
+          Step2.fixed = pickedDate;
+        } else if (Step2.activeField == 'partTime') {
+          Step2.partTime = pickedDate;
+        } else if (Step2.activeField == 'dailyPaid') {
+          Step2.dailyPaid = pickedDate;
+        } else if (Step2.activeField == 'oralContract') {
+          Step2.oralContract = pickedDate;
+        } else if (Step2.activeField == 'workingHours') {
+          Step2.workingHours = pickedDate;
+        } else if (Step2.activeField == 'overTime') {
+          Step2.overTime = pickedDate;
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,6 +227,7 @@ class _Step2State extends State<Step2> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -249,40 +299,92 @@ class _Step2State extends State<Step2> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step2.priorityPermanent,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step2.priorityPermanent,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step2.priorityPermanent = newValue;
+                      });
+                    },
+                    items: Step2.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.priorityPermanent = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step2.actionPermanent,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.actionPermanent = value ?? false;
-                });
-              },
-            ),
+            Step2.compliancePermanent == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step2.actionPermanent,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -314,31 +416,37 @@ class _Step2State extends State<Step2> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step2.deadlinePermanent,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step2.activeField = 'permanent';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step2.permanent?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -354,6 +462,7 @@ class _Step2State extends State<Step2> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -425,40 +534,92 @@ class _Step2State extends State<Step2> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step2.priorityFixed,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step2.priorityFixed,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step2.priorityFixed = newValue;
+                      });
+                    },
+                    items: Step2.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.priorityFixed = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step2.actionFixed,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.actionFixed = value ?? false;
-                });
-              },
-            ),
+            Step2.complianceFixed == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step2.actionFixed,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -490,31 +651,37 @@ class _Step2State extends State<Step2> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step2.deadlineFixed,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step2.activeField = 'fixed';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step2.fixed?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -530,6 +697,7 @@ class _Step2State extends State<Step2> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -601,40 +769,92 @@ class _Step2State extends State<Step2> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step2.priorityFixed,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step2.priorityPartTime,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step2.priorityPartTime = newValue;
+                      });
+                    },
+                    items: Step2.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.priorityFixed = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step2.actionFixed,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.actionFixed = value ?? false;
-                });
-              },
-            ),
+            Step2.compliancePartTime == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step2.actionPartTime,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -666,31 +886,37 @@ class _Step2State extends State<Step2> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step2.deadlinePartTime,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step2.activeField = 'partTime';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step2.partTime?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -706,6 +932,7 @@ class _Step2State extends State<Step2> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -777,40 +1004,92 @@ class _Step2State extends State<Step2> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step2.priorityDailyPaid,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step2.priorityDailyPaid,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step2.priorityDailyPaid = newValue;
+                      });
+                    },
+                    items: Step2.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.priorityDailyPaid = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step2.actionDailyPaid,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.actionDailyPaid = value ?? false;
-                });
-              },
-            ),
+            Step2.complianceDailyPaid == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step2.actionDailyPaid,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -842,31 +1121,37 @@ class _Step2State extends State<Step2> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step2.deadlineDailyPaid,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step2.activeField = 'dailyPaid';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step2.dailyPaid?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -882,6 +1167,7 @@ class _Step2State extends State<Step2> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -953,40 +1239,92 @@ class _Step2State extends State<Step2> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step2.priorityOralContract,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step2.priorityOralContract,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step2.priorityOralContract = newValue;
+                      });
+                    },
+                    items: Step2.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.priorityOralContract = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step2.actionOralContract,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.actionOralContract = value ?? false;
-                });
-              },
-            ),
+            Step2.complianceOralContract == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step2.actionOralContract,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -1018,31 +1356,37 @@ class _Step2State extends State<Step2> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step2.deadlineOralContract,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step2.activeField = 'oralContract';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step2.oralContract?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -1058,6 +1402,7 @@ class _Step2State extends State<Step2> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1129,40 +1474,92 @@ class _Step2State extends State<Step2> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step2.priorityWorkingHours,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step2.priorityWorkingHours,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step2.priorityWorkingHours = newValue;
+                      });
+                    },
+                    items: Step2.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.priorityWorkingHours = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step2.actionWorkingHours,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.actionWorkingHours = value ?? false;
-                });
-              },
-            ),
+            Step2.complianceWorkingHours == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step2.actionWorkingHours,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -1194,31 +1591,37 @@ class _Step2State extends State<Step2> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step2.deadlineWorkingHours,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step2.activeField = 'workingHours';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step2.workingHours?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),
@@ -1234,6 +1637,7 @@ class _Step2State extends State<Step2> {
       child: Padding(
         padding: EdgeInsets.all(SizeConfig.widthMultiplier * 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1305,40 +1709,92 @@ class _Step2State extends State<Step2> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              value: Step2.priorityOverTime,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              title: Text(
-                'Priority',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
+            SizedBox(height: SizeConfig.heightMultiplier * 1),
+            Text(
+              'Priority',
+              style: TextStyle(
+                fontSize: SizeConfig.textMultiplier * 2,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(),
+                    hint: Text(
+                      "Select Priority",
+                      style: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.5),
+                        fontSize: SizeConfig.textMultiplier * 1.8,
+                      ),
+                    ),
+                    value: Step2.priorityOverTime,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step2.priorityOverTime = newValue;
+                      });
+                    },
+                    items: Step2.priorities.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.priorityOverTime = value ?? false;
-                });
-              },
             ),
-            CheckboxListTile(
-              value: Step2.actionOverTime,
-              contentPadding: EdgeInsets.zero,
-              title: Text(
-                'Action if no compliance',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: SizeConfig.textMultiplier * 2,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  Step2.actionOverTime = value ?? false;
-                });
-              },
-            ),
+            Step2.complianceOverTime == "No"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: SizeConfig.heightMultiplier * 2),
+                    child: SlideUp(
+                      delay: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: TextFormField(
+                          controller: Step2.actionOverTime,
+                          cursorColor: AppColors.primaryColor,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            hintText: 'Action if no compliance',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: AppColors.primaryColor.withOpacity(0.5),
+                              fontSize: SizeConfig.textMultiplier * 1.8,
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.handyman_outlined,
+                              color: Color(0xFF808080),
+                            ),
+                          ),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -1370,31 +1826,37 @@ class _Step2State extends State<Step2> {
             ),
             SizedBox(height: SizeConfig.heightMultiplier * 2),
             Container(
+              height: SizeConfig.heightMultiplier * 5,
+              width: SizeConfig.widthMultiplier * 100,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextFormField(
-                controller: Step2.deadlineOverTime,
-                cursorColor: AppColors.primaryColor,
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: 'Deadline of correction',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(
-                    color: AppColors.primaryColor.withOpacity(0.5),
-                    fontSize: SizeConfig.textMultiplier * 1.8,
+              child: GestureDetector(
+                onTap: () {
+                  Step2.activeField = 'overTime';
+                  _pickDate(context);
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.date_range,
+                          color: Color(0xFF808080),
+                        ),
+                        SizedBox(width: SizeConfig.widthMultiplier * 2),
+                        Text(
+                          Step2.overTime?.toLocal().toString().split(' ')[0] ?? 'Deadline of correction',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.7),
+                            fontSize: SizeConfig.textMultiplier * 1.8,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  prefixIcon: const Icon(
-                    Icons.date_range,
-                    color: Color(0xFF808080),
-                  ),
-                ),
-                style: TextStyle(
-                  color: AppColors.primaryColor,
-                  fontSize: SizeConfig.textMultiplier * 1.8,
                 ),
               ),
             ),

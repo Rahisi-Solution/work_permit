@@ -7,7 +7,7 @@ import 'package:wps_survey/screens/survey.dart';
 
 class WelcomeScreen extends StatefulWidget {
   final dynamic splashData;
-  const WelcomeScreen({Key? key, this.splashData}) : super(key: key);
+  const WelcomeScreen({super.key, this.splashData});
 
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();
@@ -24,7 +24,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     // List of widgets for each screen
     _screens = [
       // Home(splashData: splashData),
-      const Homescreen2(),
+      Homescreen2(splashData: splashData),
       SurveyScreen(splashData: splashData),
       const AllInspections(),
       Settings(splashData: splashData),
@@ -34,38 +34,41 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _screens![_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: AppColors.primaryColor,
-        unselectedItemColor: AppColors.secondaryColor.withOpacity(0.3),
-        showUnselectedLabels: true,
-        currentIndex: _currentIndex,
-        backgroundColor: Colors.white,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assignment),
-            label: 'Inspections',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.check_circle),
-            label: 'Survey',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: _screens![_currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: AppColors.primaryColor,
+          unselectedItemColor: AppColors.secondaryColor.withOpacity(0.3),
+          showUnselectedLabels: true,
+          currentIndex: _currentIndex,
+          backgroundColor: Colors.white,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.assignment),
+              label: 'Inspections',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.check_circle),
+              label: 'Surveys',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.more_horiz),
+              label: 'More',
+            ),
+          ],
+        ),
       ),
     );
   }

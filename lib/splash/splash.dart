@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wps_survey/authentication/login.dart';
+import 'package:wps_survey/helper/appcolors.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -25,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   }
 
   _startTimer() {
-    Timer(const Duration(seconds: 5), _handleTimeout);
+    Timer(const Duration(seconds: 3), _handleTimeout);
   }
 
   _handleTimeout() {
@@ -44,7 +47,8 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
+        statusBarColor: AppColors.primaryColor,
+        statusBarBrightness: Brightness.dark,
       ),
       child: Scaffold(
         body: Container(
@@ -86,13 +90,15 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                     ),
                   ),
                   SizedBox(height: appHeight * 0.070),
-                  Center(
-                    child: SizedBox(
-                      width: appWidth / 1.5,
-                      child: const LinearProgressIndicator(
-                        backgroundColor: Color(0xFF01251D),
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Color(0xFFE1E1E1),
+                  Expanded(
+                    child: Center(
+                      child: SizedBox(
+                        width: appWidth / 1.5,
+                        child: const LinearProgressIndicator(
+                          backgroundColor: Color(0xFF01251D),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Color(0xFFE1E1E1),
+                          ),
                         ),
                       ),
                     ),
