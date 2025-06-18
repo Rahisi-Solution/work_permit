@@ -12,7 +12,8 @@ class Config {
   // static const String endPoint = 'http://172.16.10.182:7000/api/'; // John
   // static const String endPoint = 'http://172.16.10.158:8000/api/'; // Frolian
 
-  static const String appSplash = '${endPoint}app/splash';
+  static const String appSplash = 'http://172.16.10.129:2027/splash';
+  // static const String appSplash = '${endPoint}app/splash';
   static const String officerLogin = '${endPoint}login';
   static const String saveSurvey = '${endPoint}app/save_checklist';
   static const String allSurveys = '${endPoint}app/all_surveys';
@@ -20,6 +21,7 @@ class Config {
   static const String verifyPermit = '${endPoint}app/verify_permit';
   static const String changePassword = '${endPoint}change_password';
   static const String resetPassword = '${endPoint}reset_password';
+  static const String saveInspection = 'http://172.16.10.129:2027/save_inspection_checklist';
 
   static const String token = "app_token";
   static const String username = "username";

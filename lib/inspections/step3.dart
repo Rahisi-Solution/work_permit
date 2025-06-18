@@ -42,15 +42,6 @@ class Step3 extends StatefulWidget {
   static TextEditingController workersOffDays = TextEditingController();
   static TextEditingController workersHealthExam = TextEditingController();
 
-  // Controllers for deadlines fields
-  static TextEditingController deadlineAnnualLeave = TextEditingController();
-  static TextEditingController deadlineMaternityLeave = TextEditingController();
-  static TextEditingController deadlineSickLeave = TextEditingController();
-  static TextEditingController deadlineEmergenceLeave = TextEditingController();
-  static TextEditingController deadlinePublicHoliday = TextEditingController();
-  static TextEditingController deadlineOffDays = TextEditingController();
-  static TextEditingController deadlineHealthExam = TextEditingController();
-
   // Priorities dropdown values
   static List<String> priorities = [
     'Low',
@@ -76,11 +67,22 @@ class Step3 extends StatefulWidget {
 class _Step3State extends State<Step3> {
   void _pickDate(BuildContext context) async {
     final pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100),
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData.dark().copyWith(
+              colorScheme: const ColorScheme.light(
+                onPrimary: Colors.white, // selected text color
+                onSurface: AppColors.secondaryColor, // default text color
+                primary: AppColors.primaryColor, // circle color
+              ),
+            ),
+            child: child!,
+          );
+        });
 
     if (pickedDate != null) {
       setState(() {
@@ -232,6 +234,7 @@ class _Step3State extends State<Step3> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step3.complianceAnnualLeave,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step3.complianceAnnualLeave = value;
@@ -260,6 +263,7 @@ class _Step3State extends State<Step3> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step3.complianceAnnualLeave,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step3.complianceAnnualLeave = value;
@@ -467,6 +471,7 @@ class _Step3State extends State<Step3> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step3.complianceMaternityLeave,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step3.complianceMaternityLeave = value;
@@ -495,6 +500,7 @@ class _Step3State extends State<Step3> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step3.complianceMaternityLeave,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step3.complianceMaternityLeave = value;
@@ -702,6 +708,7 @@ class _Step3State extends State<Step3> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step3.complianceSickLeave,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step3.complianceSickLeave = value;
@@ -730,6 +737,7 @@ class _Step3State extends State<Step3> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step3.complianceSickLeave,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step3.complianceSickLeave = value;
@@ -937,6 +945,7 @@ class _Step3State extends State<Step3> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step3.complianceEmergenceLeave,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step3.complianceEmergenceLeave = value;
@@ -965,6 +974,7 @@ class _Step3State extends State<Step3> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step3.complianceEmergenceLeave,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step3.complianceEmergenceLeave = value;
@@ -1172,6 +1182,7 @@ class _Step3State extends State<Step3> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step3.compliancePublicHoliday,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step3.compliancePublicHoliday = value;
@@ -1200,6 +1211,7 @@ class _Step3State extends State<Step3> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step3.compliancePublicHoliday,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step3.compliancePublicHoliday = value;
@@ -1407,6 +1419,7 @@ class _Step3State extends State<Step3> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step3.complianceOffDays,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step3.complianceOffDays = value;
@@ -1435,6 +1448,7 @@ class _Step3State extends State<Step3> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step3.complianceOffDays,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step3.complianceOffDays = value;
@@ -1642,6 +1656,7 @@ class _Step3State extends State<Step3> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step3.complianceHealthExam,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step3.complianceHealthExam = value;
@@ -1670,6 +1685,7 @@ class _Step3State extends State<Step3> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step3.complianceHealthExam,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step3.complianceHealthExam = value;
@@ -1807,7 +1823,7 @@ class _Step3State extends State<Step3> {
               ),
               child: GestureDetector(
                 onTap: () {
-                  Step3.activeField = 'offDays';
+                  Step3.activeField = 'healthExam';
                   _pickDate(context);
                 },
                 child: Center(

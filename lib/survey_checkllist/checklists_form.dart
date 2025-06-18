@@ -1016,7 +1016,12 @@ class _ChecklistsFormState extends State<ChecklistsForm> {
 
       if (code == 200) {
         DialogBuilder(context).hideOpenDialog();
-        showDialog(context: context, builder: (_) => ConfirmDialog(data: widget.splashData));
+        showDialog(
+            context: context,
+            builder: (_) => ConfirmDialog(
+                  data: widget.splashData,
+                  message: "Inspection Saved Successfully",
+                ));
       } else {
         DialogBuilder(context).hideOpenDialog();
         Config.customFlushbar("Notice", message, context);

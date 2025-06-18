@@ -135,7 +135,7 @@ class _LogoutState extends State<Logout> with SingleTickerProviderStateMixin {
                         height: 50,
                         width: MediaQuery.of(context).size.width / 3.2,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFfe6d73),
+                          color: AppColors.primaryColor,
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: TextButton(
@@ -192,7 +192,6 @@ class _LogoutState extends State<Logout> with SingleTickerProviderStateMixin {
     await prefs.clear(); // Clears all stored data. Adjust based on your needs.
 
     // Redirect to login screen
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (_) => const Login()), (route) => false);
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const Login()), (route) => false);
   }
 }

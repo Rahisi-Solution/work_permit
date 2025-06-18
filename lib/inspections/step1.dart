@@ -4,8 +4,10 @@ import 'package:wps_survey/helper/size_config.dart';
 import '../../helper/appcolors.dart';
 
 class Step1 extends StatefulWidget {
+  final dynamic splashData;
   static TextEditingController employerName = TextEditingController();
   static TextEditingController emailAddress = TextEditingController();
+  static TextEditingController selectedLocation = TextEditingController();
   static TextEditingController industryNature = TextEditingController();
   static TextEditingController businessNature = TextEditingController();
   static TextEditingController previousInspector = TextEditingController();
@@ -17,13 +19,22 @@ class Step1 extends StatefulWidget {
   static TextEditingController interviewedPeople = TextEditingController();
   static TextEditingController tradeUnion = TextEditingController();
   static TextEditingController other = TextEditingController();
-  const Step1({super.key});
+  static String? institutionName;
+  const Step1({super.key, this.splashData});
 
   @override
   State<Step1> createState() => _Step1State();
 }
 
 class _Step1State extends State<Step1> {
+  List<dynamic> institution = [];
+
+  @override
+  void initState() {
+    institution = widget.splashData['institutions'] ?? [];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +55,54 @@ class _Step1State extends State<Step1> {
                       fontSize: SizeConfig.textMultiplier * 2,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
+                ),
+                SizedBox(height: SizeConfig.heightMultiplier * 2),
+                Text(
+                  'Institution',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontSize: SizeConfig.textMultiplier * 1.8,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: DropdownButtonFormField<String>(
+                    value: Step1.institutionName,
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      hintText: 'Select institution',
+                      border: InputBorder.none,
+                      prefixIcon: const Icon(
+                        Icons.language,
+                        color: AppColors.primaryColor,
+                      ),
+                      hintStyle: TextStyle(
+                        color: AppColors.primaryColor.withOpacity(0.3),
+                      ),
+                    ),
+                    items: institution.map((item) {
+                      return DropdownMenuItem<String>(
+                        value: item['id'],
+                        child: Text(
+                          item['institution'],
+                          style: TextStyle(
+                            fontSize: SizeConfig.textMultiplier * 2,
+                            color: const Color(0xFF808080),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Step1.institutionName = newValue;
+                      });
+                    },
+                    validator: (value) => value == null ? 'Please select institution' : null,
                   ),
                 ),
                 SizedBox(height: SizeConfig.heightMultiplier * 2),
@@ -137,7 +196,7 @@ class _Step1State extends State<Step1> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: TextFormField(
-                    // controller: emailAddress,
+                    controller: Step1.selectedLocation,
                     cursorColor: AppColors.primaryColor,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,

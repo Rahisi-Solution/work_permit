@@ -8,7 +8,8 @@ import '../helper/appcolors.dart';
 
 class ConfirmDialog extends StatefulWidget {
   final dynamic data;
-  const ConfirmDialog({super.key, this.data});
+  final dynamic message;
+  const ConfirmDialog({super.key, this.data, required this.message});
 
   @override
   State<ConfirmDialog> createState() => _ConfirmDialogState();
@@ -37,7 +38,8 @@ class _ConfirmDialogState extends State<ConfirmDialog> {
                   ),
                 ),
                 Text(
-                  "Inspection Saved Successfully",
+                  widget.message,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: SizeConfig.textMultiplier * 2.5,
                     color: AppColors.primaryColor,

@@ -42,15 +42,6 @@ class Step5 extends StatefulWidget {
   static TextEditingController workersDisabledPeople = TextEditingController();
   static TextEditingController workersNightShift = TextEditingController();
 
-  // Controllers for deadlines fields
-  static TextEditingController deadlineWorkersAccommodation = TextEditingController();
-  static TextEditingController deadlineOneHourBreak = TextEditingController();
-  static TextEditingController deadlineSexualHarassment = TextEditingController();
-  static TextEditingController deadlineHIVAIDS = TextEditingController();
-  static TextEditingController deadlineChildLabour = TextEditingController();
-  static TextEditingController deadlineDisabledPeople = TextEditingController();
-  static TextEditingController deadlineNightShift = TextEditingController();
-
   // Priorities dropdown values
   static List<String> priorities = [
     'Low',
@@ -76,11 +67,22 @@ class Step5 extends StatefulWidget {
 class _Step5State extends State<Step5> {
   void _pickDate(BuildContext context) async {
     final pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100),
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData.dark().copyWith(
+              colorScheme: const ColorScheme.light(
+                onPrimary: Colors.white, // selected text color
+                onSurface: AppColors.secondaryColor, // default text color
+                primary: AppColors.primaryColor, // circle color
+              ),
+            ),
+            child: child!,
+          );
+        });
 
     if (pickedDate != null) {
       setState(() {
@@ -239,6 +241,7 @@ class _Step5State extends State<Step5> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step5.complianceWorkersAccommodation,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step5.complianceWorkersAccommodation = value;
@@ -267,6 +270,7 @@ class _Step5State extends State<Step5> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step5.complianceWorkersAccommodation,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step5.complianceWorkersAccommodation = value;
@@ -474,6 +478,7 @@ class _Step5State extends State<Step5> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step5.complianceOneHourBreak,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step5.complianceOneHourBreak = value;
@@ -502,6 +507,7 @@ class _Step5State extends State<Step5> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step5.complianceOneHourBreak,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step5.complianceOneHourBreak = value;
@@ -709,6 +715,7 @@ class _Step5State extends State<Step5> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step5.complianceSexualHarassment,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step5.complianceSexualHarassment = value;
@@ -737,6 +744,7 @@ class _Step5State extends State<Step5> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step5.complianceSexualHarassment,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step5.complianceSexualHarassment = value;
@@ -944,6 +952,7 @@ class _Step5State extends State<Step5> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step5.complianceHIVAIDS,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step5.complianceHIVAIDS = value;
@@ -972,6 +981,7 @@ class _Step5State extends State<Step5> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step5.complianceHIVAIDS,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step5.complianceHIVAIDS = value;
@@ -1179,6 +1189,7 @@ class _Step5State extends State<Step5> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step5.complianceChildLabour,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step5.complianceChildLabour = value;
@@ -1207,6 +1218,7 @@ class _Step5State extends State<Step5> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step5.complianceChildLabour,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step5.complianceChildLabour = value;
@@ -1414,6 +1426,7 @@ class _Step5State extends State<Step5> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step5.complianceDisabledPeople,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step5.complianceDisabledPeople = value;
@@ -1442,6 +1455,7 @@ class _Step5State extends State<Step5> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step5.complianceDisabledPeople,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step5.complianceDisabledPeople = value;
@@ -1649,6 +1663,7 @@ class _Step5State extends State<Step5> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step5.complianceNightShift,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step5.complianceNightShift = value;
@@ -1677,6 +1692,7 @@ class _Step5State extends State<Step5> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step5.complianceNightShift,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step5.complianceNightShift = value;

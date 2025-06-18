@@ -42,15 +42,6 @@ class Step4 extends StatefulWidget {
   static TextEditingController workersFirstAid = TextEditingController();
   static TextEditingController workersProtectiveEquipments = TextEditingController();
 
-  // Controllers for deadlines fields
-  static TextEditingController deadlineMedical = TextEditingController();
-  static TextEditingController deadlineVentilation = TextEditingController();
-  static TextEditingController deadlineLighting = TextEditingController();
-  static TextEditingController deadlineNoising = TextEditingController();
-  static TextEditingController deadlineFire = TextEditingController();
-  static TextEditingController deadlineFirstAid = TextEditingController();
-  static TextEditingController deadlineProtectiveEquipments = TextEditingController();
-
   // Priorities dropdown values
   static List<String> priorities = [
     'Low',
@@ -74,14 +65,24 @@ class Step4 extends StatefulWidget {
 }
 
 class _Step4State extends State<Step4> {
-
   void _pickDate(BuildContext context) async {
     final pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100),
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData.dark().copyWith(
+              colorScheme: const ColorScheme.light(
+                onPrimary: Colors.white, // selected text color
+                onSurface: AppColors.secondaryColor, // default text color
+                primary: AppColors.primaryColor, // circle color
+              ),
+            ),
+            child: child!,
+          );
+        });
 
     if (pickedDate != null) {
       setState(() {
@@ -240,6 +241,7 @@ class _Step4State extends State<Step4> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step4.complianceMedical,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step4.complianceMedical = value;
@@ -268,6 +270,7 @@ class _Step4State extends State<Step4> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step4.complianceMedical,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step4.complianceMedical = value;
@@ -475,6 +478,7 @@ class _Step4State extends State<Step4> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step4.complianceVentilation,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step4.complianceVentilation = value;
@@ -503,6 +507,7 @@ class _Step4State extends State<Step4> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step4.complianceVentilation,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step4.complianceVentilation = value;
@@ -710,6 +715,7 @@ class _Step4State extends State<Step4> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step4.complianceLighting,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step4.complianceLighting = value;
@@ -738,6 +744,7 @@ class _Step4State extends State<Step4> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step4.complianceLighting,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step4.complianceLighting = value;
@@ -945,6 +952,7 @@ class _Step4State extends State<Step4> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step4.complianceNoising,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step4.complianceNoising = value;
@@ -973,6 +981,7 @@ class _Step4State extends State<Step4> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step4.complianceNoising,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step4.complianceNoising = value;
@@ -1180,6 +1189,7 @@ class _Step4State extends State<Step4> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step4.complianceFire,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step4.complianceFire = value;
@@ -1208,6 +1218,7 @@ class _Step4State extends State<Step4> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step4.complianceFire,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step4.complianceFire = value;
@@ -1415,6 +1426,7 @@ class _Step4State extends State<Step4> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step4.complianceFirstAid,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step4.complianceFirstAid = value;
@@ -1443,6 +1455,7 @@ class _Step4State extends State<Step4> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step4.complianceFirstAid,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step4.complianceFirstAid = value;
@@ -1650,6 +1663,7 @@ class _Step4State extends State<Step4> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step4.complianceProtectiveEquipments,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step4.complianceProtectiveEquipments = value;
@@ -1678,6 +1692,7 @@ class _Step4State extends State<Step4> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step4.complianceProtectiveEquipments,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step4.complianceProtectiveEquipments = value;

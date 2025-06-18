@@ -26,7 +26,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       // Home(splashData: splashData),
       Homescreen2(splashData: splashData),
       SurveyScreen(splashData: splashData),
-      const AllInspections(),
+      AllInspections(splashData: splashData),
       Settings(splashData: splashData),
     ];
     super.initState();

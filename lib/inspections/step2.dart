@@ -41,15 +41,6 @@ class Step2 extends StatefulWidget {
   static TextEditingController workersWorkingHours = TextEditingController();
   static TextEditingController workersOverTime = TextEditingController();
 
-  // Controllers for deadlines fields
-  static TextEditingController deadlinePermanent = TextEditingController();
-  static TextEditingController deadlineFixed = TextEditingController();
-  static TextEditingController deadlinePartTime = TextEditingController();
-  static TextEditingController deadlineDailyPaid = TextEditingController();
-  static TextEditingController deadlineOralContract = TextEditingController();
-  static TextEditingController deadlineWorkingHours = TextEditingController();
-  static TextEditingController deadlineOverTime = TextEditingController();
-
   // Priorities dropdown values
   static List<String> priorities = [
     'Low',
@@ -75,11 +66,22 @@ class Step2 extends StatefulWidget {
 class _Step2State extends State<Step2> {
   void _pickDate(BuildContext context) async {
     final pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100),
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData.dark().copyWith(
+              colorScheme: const ColorScheme.light(
+                onPrimary: Colors.white, // selected text color
+                onSurface: AppColors.secondaryColor, // default text color
+                primary: AppColors.primaryColor, // circle color
+              ),
+            ),
+            child: child!,
+          );
+        });
 
     if (pickedDate != null) {
       setState(() {
@@ -259,6 +261,7 @@ class _Step2State extends State<Step2> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step2.compliancePermanent,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step2.compliancePermanent = value;
@@ -287,6 +290,7 @@ class _Step2State extends State<Step2> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step2.compliancePermanent,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step2.compliancePermanent = value;
@@ -494,6 +498,7 @@ class _Step2State extends State<Step2> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step2.complianceFixed,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step2.complianceFixed = value;
@@ -522,6 +527,7 @@ class _Step2State extends State<Step2> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step2.complianceFixed,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step2.complianceFixed = value;
@@ -729,6 +735,7 @@ class _Step2State extends State<Step2> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step2.compliancePartTime,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step2.compliancePartTime = value;
@@ -757,6 +764,7 @@ class _Step2State extends State<Step2> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step2.compliancePartTime,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step2.compliancePartTime = value;
@@ -964,6 +972,7 @@ class _Step2State extends State<Step2> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step2.complianceDailyPaid,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step2.complianceDailyPaid = value;
@@ -992,6 +1001,7 @@ class _Step2State extends State<Step2> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step2.complianceDailyPaid,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step2.complianceDailyPaid = value;
@@ -1199,6 +1209,7 @@ class _Step2State extends State<Step2> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step2.complianceOralContract,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step2.complianceOralContract = value;
@@ -1227,6 +1238,7 @@ class _Step2State extends State<Step2> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step2.complianceOralContract,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step2.complianceOralContract = value;
@@ -1434,6 +1446,7 @@ class _Step2State extends State<Step2> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step2.complianceWorkingHours,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step2.complianceWorkingHours = value;
@@ -1462,6 +1475,7 @@ class _Step2State extends State<Step2> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step2.complianceWorkingHours,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step2.complianceWorkingHours = value;
@@ -1669,6 +1683,7 @@ class _Step2State extends State<Step2> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step2.complianceOverTime,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step2.complianceOverTime = value;
@@ -1697,6 +1712,7 @@ class _Step2State extends State<Step2> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step2.complianceOverTime,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step2.complianceOverTime = value;

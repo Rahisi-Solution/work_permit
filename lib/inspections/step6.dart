@@ -275,6 +275,7 @@ class _Step6State extends State<Step6> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step6.complianceLocal,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step6.complianceLocal = value;
@@ -303,6 +304,7 @@ class _Step6State extends State<Step6> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step6.complianceLocal,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step6.complianceLocal = value;
@@ -510,6 +512,7 @@ class _Step6State extends State<Step6> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step6.complianceForeigner,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step6.complianceForeigner = value;
@@ -538,6 +541,7 @@ class _Step6State extends State<Step6> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step6.complianceForeigner,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step6.complianceForeigner = value;
@@ -745,6 +749,7 @@ class _Step6State extends State<Step6> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step6.complianceCollectiveBargaining,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step6.complianceCollectiveBargaining = value;
@@ -773,6 +778,7 @@ class _Step6State extends State<Step6> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step6.complianceCollectiveBargaining,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step6.complianceCollectiveBargaining = value;
@@ -980,6 +986,7 @@ class _Step6State extends State<Step6> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step6.complianceSocialSecurity,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step6.complianceSocialSecurity = value;
@@ -1008,6 +1015,7 @@ class _Step6State extends State<Step6> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step6.complianceSocialSecurity,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step6.complianceSocialSecurity = value;
@@ -1215,6 +1223,7 @@ class _Step6State extends State<Step6> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step6.complianceSchemeOfService,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step6.complianceSchemeOfService = value;
@@ -1243,6 +1252,7 @@ class _Step6State extends State<Step6> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step6.complianceSchemeOfService,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step6.complianceSchemeOfService = value;
@@ -1450,6 +1460,7 @@ class _Step6State extends State<Step6> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step6.complianceSalaryIncrement,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step6.complianceSalaryIncrement = value;
@@ -1478,6 +1489,7 @@ class _Step6State extends State<Step6> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step6.complianceSalaryIncrement,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step6.complianceSalaryIncrement = value;
@@ -1685,6 +1697,7 @@ class _Step6State extends State<Step6> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step6.compliancePerformanceAppraisal,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step6.compliancePerformanceAppraisal = value;
@@ -1713,6 +1726,7 @@ class _Step6State extends State<Step6> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step6.compliancePerformanceAppraisal,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step6.compliancePerformanceAppraisal = value;
@@ -1920,6 +1934,7 @@ class _Step6State extends State<Step6> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step6.complianceSuccessionPlanning,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step6.complianceSuccessionPlanning = value;
@@ -1948,6 +1963,7 @@ class _Step6State extends State<Step6> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step6.complianceSuccessionPlanning,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step6.complianceSuccessionPlanning = value;
@@ -2155,6 +2171,7 @@ class _Step6State extends State<Step6> {
                           leading: Radio<String>(
                             value: 'Yes',
                             groupValue: Step6.complianceLabourTraining,
+                            activeColor: AppColors.secondaryColor,
                             onChanged: (value) {
                               setState(() {
                                 Step6.complianceLabourTraining = value;
@@ -2183,6 +2200,7 @@ class _Step6State extends State<Step6> {
                         leading: Radio<String>(
                           value: 'No',
                           groupValue: Step6.complianceLabourTraining,
+                          activeColor: AppColors.secondaryColor,
                           onChanged: (value) {
                             setState(() {
                               Step6.complianceLabourTraining = value;

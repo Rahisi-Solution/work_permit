@@ -6,7 +6,8 @@ import 'package:wps_survey/widgets/slide_up.dart';
 import '../helper/appcolors.dart';
 
 class AllInspections extends StatefulWidget {
-  const AllInspections({super.key});
+  final dynamic splashData;
+  const AllInspections({super.key, this.splashData});
 
   @override
   State<AllInspections> createState() => _AllInspectionsState();
@@ -901,7 +902,9 @@ class _AllInspectionsState extends State<AllInspections> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const InspectionForm(),
+                  builder: (_) => InspectionForm(
+                    splashData: widget.splashData,
+                  ),
                 ),
               );
             },
