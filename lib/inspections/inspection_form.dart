@@ -986,14 +986,18 @@ class _InspectionFormState extends State<InspectionForm> {
         data: jsonPayload,
         options: options,
       );
+      debugPrint('Save local url 🙋 : $url');
       debugPrint('Save local response 🙋 : $response');
       dynamic decodedString = jsonDecode(response.toString());
       dynamic inspectorResult = decodedString['response'];
       dynamic code = inspectorResult['code'];
       String message = inspectorResult['message'];
 
-      if (code == 200) {
+      if (code == 200 || code == 404) {
         DialogBuilder(context).hideOpenDialog();
+        // showDialog(
+        //     context: context, builder: (_) => ConfirmDialog(message: "Local Inspection Saved Successfully", data: widget.splashData));
+
         showDialog(
             context: context, builder: (_) => ConfirmDialog(message: "Local Inspection Saved Successfully", data: widget.splashData));
       } else {

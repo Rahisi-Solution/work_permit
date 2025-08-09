@@ -6,13 +6,15 @@ import '../helper/size_config.dart';
 
 class Config {
   /* Online */
-  static const String endPoint = 'https://labour.rahisi.co.tz/api/';
+  // static const String endPoint = 'https://labour.rahisi.co.tz/api/';  // Old url
+  static const String endPoint = 'https://apilabours.rahisi.co.tz/api/';
 
   // Local endpoints
-  // static const String endPoint = 'http://172.16.10.182:7000/api/'; // John
+  // static const String endPoint = 'http://172.16.10.137:7000/api/'; // John
   // static const String endPoint = 'http://172.16.10.158:8000/api/'; // Frolian
+  // static const String endPoint = 'http://172.16.10.129:2027/'; // Jose
 
-  static const String appSplash = 'http://172.16.10.129:2027/splash';
+  static const String appSplash = '${endPoint}splash';
   // static const String appSplash = '${endPoint}app/splash';
   static const String officerLogin = '${endPoint}login';
   static const String saveSurvey = '${endPoint}app/save_checklist';
@@ -21,7 +23,8 @@ class Config {
   static const String verifyPermit = '${endPoint}app/verify_permit';
   static const String changePassword = '${endPoint}change_password';
   static const String resetPassword = '${endPoint}reset_password';
-  static const String saveInspection = 'http://172.16.10.129:2027/save_inspection_checklist';
+  static const String saveInspection = '${endPoint}app/save_inspection_checklist';
+  static const String allInspections = '${endPoint}all_inspection';
 
   static const String token = "app_token";
   static const String username = "username";

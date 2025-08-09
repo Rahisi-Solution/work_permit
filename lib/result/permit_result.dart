@@ -21,80 +21,83 @@ class _PermitResultState extends State<PermitResult> {
   Color? statusColor;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: AppColors.primaryColor,
-          title: Text(
-            'Permit details',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: SizeConfig.textMultiplier * 2.7,
+    return PopScope(
+      canPop: false,
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: AppColors.primaryColor,
+            title: Text(
+              'Permit details',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: SizeConfig.textMultiplier * 2.7,
+              ),
             ),
           ),
-        ),
-        body: SizedBox(
-          width: SizeConfig.widthMultiplier * 100,
-          height: SizeConfig.heightMultiplier * 100,
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _permitDetails(),
-                    SizedBox(height: SizeConfig.heightMultiplier * 1),
-                    _statusIndicator(),
-                    SizedBox(height: SizeConfig.heightMultiplier * 1),
-                    _otherDetails(),
-                  ],
+          body: SizedBox(
+            width: SizeConfig.widthMultiplier * 100,
+            height: SizeConfig.heightMultiplier * 100,
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _permitDetails(),
+                      SizedBox(height: SizeConfig.heightMultiplier * 1),
+                      _statusIndicator(),
+                      SizedBox(height: SizeConfig.heightMultiplier * 1),
+                      _otherDetails(),
+                    ],
+                  ),
                 ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                left: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => WelcomeScreen(
-                          splashData: widget.splashData,
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => WelcomeScreen(
+                            splashData: widget.splashData,
+                          ),
                         ),
+                      );
+                    },
+                    child: Container(
+                      width: SizeConfig.widthMultiplier * 30,
+                      height: SizeConfig.heightMultiplier * 8,
+                      decoration: const BoxDecoration(
+                        color: AppColors.primaryColor,
                       ),
-                    );
-                  },
-                  child: Container(
-                    width: SizeConfig.widthMultiplier * 30,
-                    height: SizeConfig.heightMultiplier * 8,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primaryColor,
-                    ),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            CupertinoIcons.home,
-                            size: SizeConfig.widthMultiplier * 5,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: SizeConfig.widthMultiplier * 3),
-                          Text(
-                            "Back home",
-                            style: TextStyle(
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              CupertinoIcons.home,
+                              size: SizeConfig.widthMultiplier * 5,
                               color: Colors.white,
-                              fontSize: SizeConfig.textMultiplier * 2,
                             ),
-                          ),
-                        ],
+                            SizedBox(width: SizeConfig.widthMultiplier * 3),
+                            Text(
+                              "Back home",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: SizeConfig.textMultiplier * 2,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -118,10 +121,10 @@ class _PermitResultState extends State<PermitResult> {
         children: [
           Container(
             color: Colors.grey,
-            // child: Image.asset(
-            child: Image.network(
-              // "assets/images/profile.jpeg",
-              widget.permitData["photo_url"],
+            child: Image.asset(
+              // child: Image.network(
+              "assets/images/profile.jpg",
+              // widget.permitData["photo_url"],
               width: SizeConfig.imageSizeMultiplier * 38,
               height: SizeConfig.heightMultiplier * 24,
               fit: BoxFit.cover,

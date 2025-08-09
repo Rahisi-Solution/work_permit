@@ -62,7 +62,7 @@ class _LogoutState extends State<Logout> with SingleTickerProviderStateMixin {
         child: ScaleTransition(
           scale: slideAnimation,
           child: Container(
-            height: SizeConfig.heightMultiplier * 45,
+            height: SizeConfig.heightMultiplier * 40,
             width: SizeConfig.widthMultiplier * 95,
             decoration: BoxDecoration(
               color: materialColor,
@@ -86,12 +86,12 @@ class _LogoutState extends State<Logout> with SingleTickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  SizedBox(height: SizeConfig.heightMultiplier * 2),
-                  Container(
-                    width: SizeConfig.widthMultiplier * 90,
-                    height: 0.5,
-                    color: Colors.grey[300],
-                  ),
+                  // SizedBox(height: SizeConfig.heightMultiplier * 2),
+                  // Container(
+                  //   width: SizeConfig.widthMultiplier * 90,
+                  //   height: 0.5,
+                  //   color: Colors.grey[300],
+                  // ),
                   SizedBox(height: SizeConfig.heightMultiplier * 3),
                   Center(
                     child: Text(
@@ -103,12 +103,12 @@ class _LogoutState extends State<Logout> with SingleTickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  SizedBox(height: SizeConfig.heightMultiplier * 3),
+                  SizedBox(height: SizeConfig.heightMultiplier * 5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        height: 50,
+                        height: SizeConfig.heightMultiplier * 5,
                         width: MediaQuery.of(context).size.width / 3.2,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
@@ -132,7 +132,7 @@ class _LogoutState extends State<Logout> with SingleTickerProviderStateMixin {
                         ),
                       ),
                       Container(
-                        height: 50,
+                        height: SizeConfig.heightMultiplier * 5,
                         width: MediaQuery.of(context).size.width / 3.2,
                         decoration: BoxDecoration(
                           color: AppColors.primaryColor,

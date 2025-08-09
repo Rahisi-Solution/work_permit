@@ -4,8 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wps_survey/authentication/change_password.dart';
@@ -815,27 +815,28 @@ class _Homescreen2State extends State<Homescreen2> {
   }
 
   Future<void> scanQR() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.QR);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
+    final String? scannedCode = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const QRScannerPage()),
+    );
+
     if (!mounted) return;
 
+    String refNumber = scannedCode?.replaceAll('\\', '').replaceAll('"', '') ?? "";
+
+    if (refNumber.isEmpty || refNumber == "-1") {
+      Config.customFlushbar("Notice", "Missing QR code", context);
+      return;
+    }
+
     setState(() {
-      _scanBarcode = barcodeScanRes;
+      _scanBarcode = refNumber;
     });
-    String filteredString = _scanBarcode.replaceAll('\\', '');
-    String refNumber = filteredString.replaceAll('"', '');
+
     DialogBuilder(context).showLoadingIndicator('Loading ...');
     print("Number ya vice now: 🙋‍ $refNumber");
-    if (refNumber == "-1") {
-      DialogBuilder(context).hideOpenDialog();
-      Config.customFlushbar("Notice", "Missing Qr code", context);
-    } else {
-      _verifyPermit(refNumber);
-    }
+
+    _verifyPermit(refNumber);
   }
 
   _verifyPermit(String permitNumber) async {
@@ -904,5 +905,47 @@ class _Homescreen2State extends State<Homescreen2> {
   Future<void> _insertInvalidPermit(String permitNumber) async {
     final dbHelper = DatabaseHelper();
     await dbHelper.insertInvalidPermit(permitNumber, currentDate, currentTime);
+  }
+}
+
+// qr_scanner_page.dart
+
+class QRScannerPage extends StatefulWidget {
+  const QRScannerPage({super.key});
+
+  @override
+  State<QRScannerPage> createState() => _QRScannerPageState();
+}
+
+class _QRScannerPageState extends State<QRScannerPage> {
+  Barcode? _barcode;
+  void _handleBarcode(BarcodeCapture barcodes) {
+    if (mounted) {
+      setState(() {
+        _barcode = barcodes.barcodes.firstOrNull;
+      });
+      print('Barcode in QR screen: $_barcode');
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: true,
+      child: Scaffold(
+        body: MobileScanner(
+          onDetect: (BarcodeCapture capture) {
+            final List<Barcode> barcodes = capture.barcodes;
+            if (barcodes.isNotEmpty) {
+              final String? code = barcodes.first.rawValue;
+              if (code != null) {
+                Navigator.pop(context, code);
+              }
+            }
+          },
+        ),
+      ),
+    );
   }
 }

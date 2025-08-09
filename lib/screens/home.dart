@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -236,7 +235,7 @@ class _HomeState extends State<Home> {
           SizedBox(height: SizeConfig.heightMultiplier * 2),
           GestureDetector(
             onTap: () {
-              scanQR();
+              // scanQR();
             },
             child: Container(
               width: SizeConfig.widthMultiplier * 100,
@@ -373,24 +372,24 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<void> scanQR() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.QR);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-    if (!mounted) return;
-
-    setState(() {
-      _scanBarcode = barcodeScanRes;
-    });
-    String filteredString = _scanBarcode.replaceAll('\\', '');
-    String refNumber = filteredString.replaceAll('"', '');
-    DialogBuilder(context).showLoadingIndicator('Loading ...');
-    print("Number ya vice now: 🙋‍ $refNumber");
-    _verifyPermit(refNumber);
-  }
+  // Future<void> scanQR() async {
+  //   String barcodeScanRes;
+  //   try {
+  //     barcodeScanRes = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.QR);
+  //   } on PlatformException {
+  //     barcodeScanRes = 'Failed to get platform version.';
+  //   }
+  //   if (!mounted) return;
+  //
+  //   setState(() {
+  //     _scanBarcode = barcodeScanRes;
+  //   });
+  //   String filteredString = _scanBarcode.replaceAll('\\', '');
+  //   String refNumber = filteredString.replaceAll('"', '');
+  //   DialogBuilder(context).showLoadingIndicator('Loading ...');
+  //   print("Number ya vice now: 🙋‍ $refNumber");
+  //   _verifyPermit(refNumber);
+  // }
 
   _verifyPermit(String permitNumber) async {
     String url = Config.verifyPermit;
